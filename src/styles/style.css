@@ -1,0 +1,18 @@
+.slide.is-2 {
+    transform: translateX(10%);
+}
+
+.slider-wrapper {
+    overflow: hidden;
+}
+
+.overlay{
+    background:#88F9FC;
+    transform: translateX(100%);
+    -webkit-mask-image: 
+        linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+        linear-gradient(to left, transparent, black 10%, black 90%, transparent); 
+}
+
+
+

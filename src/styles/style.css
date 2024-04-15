@@ -1,8 +1,7 @@
-.home-slide_fade{
+.hero_slide-fader{
     -webkit-mask-image: 
     linear-gradient(to right, transparent, black 10%, black 90%, transparent), /* left fade */
     linear-gradient(to left, transparent, black 10%, black 90%, transparent); /* right fade */
-    background-color: #9af4f9;
 
 }
 

@@ -1,6 +1,9 @@
 import './styles/style.css'
 
 import gsap from 'gsap'
+import { Flip } from "gsap/Flip";
+
+gsap.registerPlugin(Flip);
 
 const slides = ['burger', 'cake', 'pizza', 'sushi'];
 
@@ -45,3 +48,41 @@ slides.forEach((slide, index) => {
         transitionSlide(slide, prevSlide, 'prev');
     });
 });
+
+
+    gsap.set('.slider_overlay-wrapper', { display: 'none', opacity: 0 });
+
+    
+
+document.querySelector('[data-overlay-balloon="main"]').addEventListener('click', () => {
+
+    let main = document.querySelector('[data-overlay-balloon="main"]');
+    let anchor = document.querySelector('[data-overlay-balloon="anchor"]');
+
+    let state = Flip.getState(`[data-overlay-balloon="main"]`);
+    anchor.appendChild(main);
+
+    Flip.from(state, { duration: 1, ease: "power1.out" });
+    gsap.to('.slider_overlay-wrapper', {display: 'flex', opacity: 1})
+    gsap.from('.is-postcard', {yPercent:150, duration: 1.5, ease: "back.inOut(1.7)"}, "<")
+    gsap.from('.slider_overlay-button', { yPercent:50, opacity:0, duration: 1, ease: "power4.inOut"}, "<0.7");
+
+});
+
+
+document.querySelector('.slider_overlay-button').addEventListener('click', () => {
+
+        let main = document.querySelector('[data-overlay-balloon="main"]');
+        let anchor = document.querySelector('[data-overlay-balloon="anchor"]');
+    
+        let state = Flip.getState(`[data-overlay-balloon="main"]`);
+        anchor.removeChild(main);
+    
+        Flip.from(state, { duration: 1, ease: "power1.out", onComplete: () => {
+            gsap.to('.slider_overlay-wrapper', {display: 'none', opacity: 0});
+            gsap.to('.is-postcard', {yPercent: 0, duration: 1.5, ease: "back.inOut(1.7)"});
+            gsap.to('.slider_overlay-button', {yPercent: 0, opacity: 1, duration: 1, ease: "power4.inOut"});
+        } });
+        
+    });
+    

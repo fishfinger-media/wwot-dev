@@ -3,11 +3,53 @@ import './styles/style.css'
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import bodymovin from 'lottie-web';
 gsap.registerPlugin(Flip,ScrollTrigger);
 
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
+
+let playSound = false;
+let audio = new Audio('path_to_your_audio_file.mp3');
+
+var animation = bodymovin.loadAnimation({
+    container: document.getElementById('bm'),
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6630082b82ff377920585db0_Menu.json'
+});
+
+function hideSlideAndPlayAnimation() {
+    gsap.to('.loader_slide.slide-1', {
+        opacity: 0,
+        duration: 1.4,
+        ease: "power4.inOut",
+        onComplete: () => {
+            document.querySelector('.loader_slide.slide-1').remove();
+            animation.goToAndStop(1, true);
+            animation.playSegments([1, animation.totalFrames - 1], true);
+            if (playSound) {
+                audio.loop = true;
+                audio.play();
+            }
+        }
+    });
+}
+
+document.querySelector('[loader-menu="yes"]').addEventListener('click', () => {
+    playSound = true;
+    hideSlideAndPlayAnimation();
+    audio.play();
+});
+
+document.querySelector('[loader-menu="no"]').addEventListener('click', () => {
+    playSound = false;
+    hideSlideAndPlayAnimation();
+});
+
+
 
 
 if (document.querySelector('.section_home-hero')) {
@@ -200,3 +242,4 @@ let teamSwiper = new Swiper('.swiper.is-team', {
     },
 
 });
+

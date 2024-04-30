@@ -4,10 +4,19 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import bodymovin from 'lottie-web';
 gsap.registerPlugin(ScrollTrigger);
-
+import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
+
+const lenis = new Lenis()
+
+function raf(time) {
+  lenis.raf(time)
+  requestAnimationFrame(raf)
+}
+
+requestAnimationFrame(raf)
 
 let playSound = false;
 // INTRO
@@ -61,6 +70,7 @@ function hideSlideAndPlayAnimation() {
 
     // Start playing audio
     if (playSound) {
+        audio.volume = 0.3;
         audio.loop = true;
         audio.play();
     }

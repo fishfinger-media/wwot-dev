@@ -92,12 +92,17 @@ if (document.querySelector('.section_home-hero')) {
                         ease: "power4.inOut",
 
                     });
-                    gsap.to('.navigation', {
+                    gsap.to('.nav_link-home', {
                         yPercent: 0,
                         duration: 1.5,
                         ease: "power4.inOut",
                         delay: 0.5
                     });
+                    gsap.from('.nav_link',{
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power4.inOut",
+                    })
 
 
                 }
@@ -514,3 +519,4 @@ let homeSwiper = new Swiper('.swiper.is-home', {
     },
     
 });
+

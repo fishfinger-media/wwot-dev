@@ -506,6 +506,10 @@ barkElements.forEach(function (element) {
 
 // home swiper
 
+if (document.querySelector('.section_home-hero')) {
+   
+
+
 let homeSwiper = new Swiper('.swiper.is-home', {
 
     wrapperClass: 'swiper_wrapper',
@@ -517,4 +521,40 @@ let homeSwiper = new Swiper('.swiper.is-home', {
     },
     
 });
+}
 
+
+let newsSwiper = new Swiper('.swiper.is-news', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+    slidesPerView: 4,
+    spaceBetween: 20,
+
+    navigation: {
+        nextEl: '.swiper_nav.is-next',
+        prevEl: '.swiper_nav.is-prev',
+    },
+});
+
+
+gsap.from('.club_dog-images',{
+    scale: 0,
+    duration: 1,
+    ease: "power4.inOut",
+    stagger: {
+        amount: 0.4,
+        from: "random"
+    }
+})
+
+
+gsap.from('.newsletter_container',{
+    yPercent: 100,
+    duration: 1.5,
+    ease: "power4.inOut",
+    scrollTrigger: {
+        trigger: '.footer',
+        start: "top 80%",
+    }
+})

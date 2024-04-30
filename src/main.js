@@ -378,6 +378,8 @@ let productSwiper = new Swiper ('.swiper.is-product', {
     });
 }
 
+if (document.querySelector('.swiper.is-why')) {
+
 let whySwiper = new Swiper('.swiper.is-why', {
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
@@ -395,7 +397,7 @@ let whySwiper = new Swiper('.swiper.is-why', {
     }
 });
 
-
+}
     let envelope = gsap.timeline();
 
     envelope.to('.envolope.top',{

@@ -9,10 +9,11 @@ import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
 
+let playSound = false;
 // INTRO
 if (document.querySelector('.section_home-hero')) {
 
-let playSound = false;
+
 let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 
@@ -187,10 +188,22 @@ if (document.querySelector('.section_home-hero')) {
         const prevSlide = slides[(index - 1 + slides.length) % slides.length];
 
         document.querySelector(`[goToSlide="${nextSlide}"][slide-direction="next"]`).addEventListener('click', () => {
+          
+
+            if (playSound) {
+                const sound = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/wind.mp3');
+                sound.volume = 0.4;
+                sound.play();
+            }
             transitionSlide(slide, nextSlide, 'next');
         });
 
         document.querySelector(`[goToSlide="${prevSlide}"][slide-direction="prev"]`).addEventListener('click', () => {
+            if (playSound) {
+                const sound = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/wind.mp3');
+                sound.volume = 0.4;
+                sound.play();
+            }
             transitionSlide(slide, prevSlide, 'prev');
         });
     });

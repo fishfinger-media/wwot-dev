@@ -26,9 +26,7 @@ if (document.querySelector('.section_home-hero')) {
     let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 
-    gsap.set('.navigation', {
-        yPercent: -100
-    });
+   
 
     var animation = bodymovin.loadAnimation({
         container: document.getElementById('bm'),

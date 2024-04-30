@@ -2,8 +2,9 @@ import './styles/style.css'
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
 import bodymovin from 'lottie-web';
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Draggable);
 import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
@@ -558,3 +559,41 @@ gsap.from('.newsletter_container',{
         start: "top 80%",
     }
 })
+
+
+const stickers = document.querySelectorAll('.sticker');
+
+stickers.forEach(sticker => {
+    // Apply Draggable to each sticker element
+    Draggable.create(sticker, {
+        type: "x,y",
+        edgeResistance: 0.65,
+        onPress: function() {
+            this.startX = this.x;
+            this.startY = this.y;
+        },
+        onDrag: function() {
+            // Your code to handle dragging events if needed
+        },
+        onRelease: function() {
+            // Your code when the sticker is released after dragging
+        }
+    });
+
+    // Add GSAP hover effect
+    sticker.addEventListener('mouseenter', function() {
+        gsap.to(this, {
+            duration: 0.3,
+            scale: 1.2, // Adjust as needed
+            ease: "back.inOut(1.8)" // Adjust easing function as needed
+        });
+    });
+
+    sticker.addEventListener('mouseleave', function() {
+        gsap.to(this, {
+            duration: 0.3,
+            scale: 1, // Adjust as needed
+            ease: "back.inOut(1.8)" // Adjust easing function as needed
+        });
+    });
+});

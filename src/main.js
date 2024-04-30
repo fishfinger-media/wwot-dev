@@ -437,4 +437,21 @@ let whySwiper = new Swiper('.swiper.is-why', {
             
    
 
+            gsap.from(".star", {
+                scale: 0,
+                duration: 0.2,
+                ease: "power4.inOut",
+                stagger: {
+                  each: 0.05,
+                  from: "random"
+                },
+                
+                ease: "power2.inOut",
+                scrollTrigger: {
+                    trigger: ".section_home-club",
+                    start: "top 60%", // Change this according to your needs
+                    end: "bottom center", // Change this according to your needs
+                 
+                  },
 
+              });

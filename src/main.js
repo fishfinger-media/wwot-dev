@@ -1,47 +1,99 @@
 import './styles/style.css'
 
 import { gsap } from "gsap";
-import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import bodymovin from 'lottie-web';
-gsap.registerPlugin(Flip,ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
 
+// INTRO
+if (document.querySelector('.section_home-hero')) {
+
 let playSound = false;
-let audio = new Audio('path_to_your_audio_file.mp3');
+let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
+
+gsap.set('.navigation',{yPercent: -100});
 
 var animation = bodymovin.loadAnimation({
     container: document.getElementById('bm'),
     renderer: 'svg',
     loop: false,
     autoplay: false,
-    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6630082b82ff377920585db0_Menu.json'
+    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json'
 });
 
+function disableScroll() {
+    document.body.classList.add('no-scroll');
+}
+
+function enableScroll() {
+    document.body.classList.remove('no-scroll');
+}
+
 function hideSlideAndPlayAnimation() {
+    disableScroll();
+
+    // Hide slide 1
     gsap.to('.loader_slide.slide-1', {
         opacity: 0,
         duration: 1.4,
         ease: "power4.inOut",
         onComplete: () => {
             document.querySelector('.loader_slide.slide-1').remove();
-            animation.goToAndStop(1, true);
-            animation.playSegments([1, animation.totalFrames - 1], true);
-            if (playSound) {
-                audio.loop = true;
-                audio.play();
-            }
         }
     });
+
+    // Show slide 2 containing the Lottie animation
+    gsap.to('.loader_slide.slide-2', {
+        opacity: 1,
+        duration: 1.4,
+        ease: "power4.inOut",
+    });
+
+    // Start playing the animation immediately
+    animation.goToAndStop(1, true);
+    animation.playSegments([1, animation.totalFrames - 1], true);
+
+    // Start playing audio
+    if (playSound) {
+        audio.loop = true;
+        audio.play();
+    }
+
+    // Wait for about 4 seconds after the Lottie animation finishes
+    setTimeout(() => {
+        gsap.to('.home-loader',{
+            yPercent: -100,
+            duration: 1.5,
+            ease: "power4.inOut",
+            onStart: () => {
+                enableScroll();
+
+                gsap.from('[data-slide="burger"]', {
+                    yPercent: 30,
+                    duration: 1.8,
+                    ease: "power4.inOut",
+                    
+                });
+                gsap.to('.navigation', {
+                    yPercent: 0,
+                    duration: 1.5,
+                    ease: "power4.inOut",
+                    delay: 0.5
+                });
+                
+                
+            }
+        });
+    }, (animation.totalFrames / animation.frameRate) * 1000); // Wait for Lottie animation to finish + 4 seconds
 }
 
 document.querySelector('[loader-menu="yes"]').addEventListener('click', () => {
     playSound = true;
     hideSlideAndPlayAnimation();
-    audio.play();
 });
 
 document.querySelector('[loader-menu="no"]').addEventListener('click', () => {
@@ -49,9 +101,10 @@ document.querySelector('[loader-menu="no"]').addEventListener('click', () => {
     hideSlideAndPlayAnimation();
 });
 
+}
 
 
-
+// SLIDER
 if (document.querySelector('.section_home-hero')) {
 
 
@@ -142,6 +195,7 @@ if (document.querySelector('.section_home-hero')) {
     });
 
 }
+
 // GLOBAL ANIMATIONS
 
 const splitWords = document.querySelectorAll('[data-heading]')
@@ -174,7 +228,7 @@ splitParagraphs.forEach(splitParagraphs => {
         scrollTrigger: {
             trigger: splitParagraphs,
             start: "top 80%",
-        }
+        } 
     })
 });
 
@@ -188,7 +242,10 @@ polaroids.forEach(polaroid => {
         scale: 0,
         duration: 1,
         ease: "back",
-
+        scrollTrigger: {
+            trigger: polaroid,
+            start: "top 80%",
+        }
     });
 });
 
@@ -242,4 +299,82 @@ let teamSwiper = new Swiper('.swiper.is-team', {
     },
 
 });
+
+// QUIZ
+if (document.querySelector('.section_quiz')) {
+
+let quizSwiper = new Swiper('.swiper.is-quiz', { 
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+
+    speed:0,
+});
+
+document.querySelectorAll('[quiz-goto]').forEach(button => {
+    button.addEventListener('click', function() {
+        // Get the value of quiz-goto attribute
+        let slideIndex = parseInt(this.getAttribute('quiz-goto'));
+        
+        // Go to the corresponding slide
+        quizSwiper.slideTo(slideIndex - 1, 0); // -1 because slide index starts from 0
+    });
+});
+
+
+let btn = document.querySelector('[quiz-goto="3"]');
+let input = document.getElementById('quiz-input');
+let names = document.querySelectorAll('[quiz-name]');
+
+btn.style.pointerEvents = 'none';
+btn.style.opacity = '0.5';
+
+    
+// if input is empty do nothing else enable button
+
+input.addEventListener('input', function() {
+    if (input.value === '') {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.5';
+    } else {
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+    }
+})
+
+
+btn.addEventListener('click', function() {
+    names.forEach(name => {
+        name.textContent = input.value;
+    })
+});
+}
+
+
+
+    let envelope = gsap.timeline();
+
+    envelope.to('.envolope.top',{
+        rotateX: 180,
+        duration: 2,
+        ease: "power4.inOut",
+        scrollTrigger: {
+            trigger: '.envolope.top',
+            start: "top 80%",
+            end: "top 50%",
+            scrub: 1
+        }
+    })
+
+    let dogPhotos = document.querySelectorAll('.polaroid');
+
+    dogPhotos.forEach((photo) => {
+        gsap.from(photo, {
+            scale: 0,
+            duration: 1,
+            ease: "back",
+           
+        });
+    });
+    
+
 

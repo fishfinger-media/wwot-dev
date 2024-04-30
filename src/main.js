@@ -8,12 +8,12 @@ import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
-
 const lenis = new Lenis()
 
+
 function raf(time) {
-  lenis.raf(time)
-  requestAnimationFrame(raf)
+    lenis.raf(time)
+    requestAnimationFrame(raf)
 }
 
 requestAnimationFrame(raf)
@@ -23,95 +23,97 @@ let playSound = false;
 if (document.querySelector('.section_home-hero')) {
 
 
-let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
+    let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 
-gsap.set('.navigation',{yPercent: -100});
-
-var animation = bodymovin.loadAnimation({
-    container: document.getElementById('bm'),
-    renderer: 'svg',
-    loop: false,
-    autoplay: false,
-    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json'
-});
-
-function disableScroll() {
-    document.body.classList.add('no-scroll');
-}
-
-function enableScroll() {
-    document.body.classList.remove('no-scroll');
-}
-
-function hideSlideAndPlayAnimation() {
-    disableScroll();
-
-    // Hide slide 1
-    gsap.to('.loader_slide.slide-1', {
-        opacity: 0,
-        duration: 1.4,
-        ease: "power4.inOut",
-        onComplete: () => {
-            document.querySelector('.loader_slide.slide-1').remove();
-        }
+    gsap.set('.navigation', {
+        yPercent: -100
     });
 
-    // Show slide 2 containing the Lottie animation
-    gsap.to('.loader_slide.slide-2', {
-        opacity: 1,
-        duration: 1.4,
-        ease: "power4.inOut",
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('bm'),
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json'
     });
 
-    // Start playing the animation immediately
-    animation.goToAndStop(1, true);
-    animation.playSegments([1, animation.totalFrames - 1], true);
-
-    // Start playing audio
-    if (playSound) {
-        audio.volume = 0.3;
-        audio.loop = true;
-        audio.play();
+    function disableScroll() {
+        document.body.classList.add('no-scroll');
     }
 
-    // Wait for about 4 seconds after the Lottie animation finishes
-    setTimeout(() => {
-        gsap.to('.home-loader',{
-            yPercent: -100,
-            duration: 1.5,
-            ease: "power4.inOut",
-            onStart: () => {
-                enableScroll();
+    function enableScroll() {
+        document.body.classList.remove('no-scroll');
+    }
 
-                gsap.from('[data-slide="burger"]', {
-                    yPercent: 30,
-                    duration: 1.8,
-                    ease: "power4.inOut",
-                    
-                });
-                gsap.to('.navigation', {
-                    yPercent: 0,
-                    duration: 1.5,
-                    ease: "power4.inOut",
-                    delay: 0.5
-                });
-                
-                
+    function hideSlideAndPlayAnimation() {
+        disableScroll();
+
+        // Hide slide 1
+        gsap.to('.loader_slide.slide-1', {
+            opacity: 0,
+            duration: 1.4,
+            ease: "power4.inOut",
+            onComplete: () => {
+                document.querySelector('.loader_slide.slide-1').remove();
             }
         });
-    }, (animation.totalFrames / animation.frameRate) * 1000); // Wait for Lottie animation to finish + 4 seconds
-}
 
-document.querySelector('[loader-menu="yes"]').addEventListener('click', () => {
-    playSound = true;
-    hideSlideAndPlayAnimation();
-});
+        // Show slide 2 containing the Lottie animation
+        gsap.to('.loader_slide.slide-2', {
+            opacity: 1,
+            duration: 1.4,
+            ease: "power4.inOut",
+        });
 
-document.querySelector('[loader-menu="no"]').addEventListener('click', () => {
-    playSound = false;
-    hideSlideAndPlayAnimation();
-});
+        // Start playing the animation immediately
+        animation.goToAndStop(1, true);
+        animation.playSegments([1, animation.totalFrames - 1], true);
+
+        // Start playing audio
+        if (playSound) {
+            audio.volume = 0.3;
+            audio.loop = true;
+            audio.play();
+        }
+
+        // Wait for about 4 seconds after the Lottie animation finishes
+        setTimeout(() => {
+            gsap.to('.home-loader', {
+                yPercent: -100,
+                duration: 1.5,
+                ease: "power4.inOut",
+                onStart: () => {
+                    enableScroll();
+
+                    gsap.from('[data-slide="burger"]', {
+                        yPercent: 30,
+                        duration: 1.8,
+                        ease: "power4.inOut",
+
+                    });
+                    gsap.to('.navigation', {
+                        yPercent: 0,
+                        duration: 1.5,
+                        ease: "power4.inOut",
+                        delay: 0.5
+                    });
+
+
+                }
+            });
+        }, (animation.totalFrames / animation.frameRate) * 1000); // Wait for Lottie animation to finish + 4 seconds
+    }
+
+    document.querySelector('[loader-menu="yes"]').addEventListener('click', () => {
+        playSound = true;
+        hideSlideAndPlayAnimation();
+    });
+
+    document.querySelector('[loader-menu="no"]').addEventListener('click', () => {
+        playSound = false;
+        hideSlideAndPlayAnimation();
+    });
 
 }
 
@@ -198,7 +200,7 @@ if (document.querySelector('.section_home-hero')) {
         const prevSlide = slides[(index - 1 + slides.length) % slides.length];
 
         document.querySelector(`[goToSlide="${nextSlide}"][slide-direction="next"]`).addEventListener('click', () => {
-          
+
 
             if (playSound) {
                 const sound = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/wind.mp3');
@@ -252,7 +254,7 @@ splitParagraphs.forEach(splitParagraphs => {
         scrollTrigger: {
             trigger: splitParagraphs,
             start: "top 80%",
-        } 
+        }
     })
 });
 
@@ -328,153 +330,172 @@ let teamSwiper = new Swiper('.swiper.is-team', {
 if (document.querySelector('.section_quiz')) {
 
 
-let quizSwiper = new Swiper('.swiper.is-quiz', { 
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper_slide',
+    let quizSwiper = new Swiper('.swiper.is-quiz', {
+        wrapperClass: 'swiper_wrapper',
+        slideClass: 'swiper_slide',
 
-    speed:0,
-});
-
-document.querySelectorAll('[quiz-goto]').forEach(button => {
-    button.addEventListener('click', function() {
-        // Get the value of quiz-goto attribute
-        let slideIndex = parseInt(this.getAttribute('quiz-goto'));
-        
-        // Go to the corresponding slide
-        quizSwiper.slideTo(slideIndex - 1, 0); // -1 because slide index starts from 0
+        speed: 0,
     });
-});
+
+    document.querySelectorAll('[quiz-goto]').forEach(button => {
+        button.addEventListener('click', function () {
+            // Get the value of quiz-goto attribute
+            let slideIndex = parseInt(this.getAttribute('quiz-goto'));
+
+            // Go to the corresponding slide
+            quizSwiper.slideTo(slideIndex - 1, 0); // -1 because slide index starts from 0
+        });
+    });
 
 
-let btn = document.querySelector('[quiz-goto="3"]');
-let input = document.getElementById('quiz-input');
-let names = document.querySelectorAll('[quiz-name]');
+    let btn = document.querySelector('[quiz-goto="3"]');
+    let input = document.getElementById('quiz-input');
+    let names = document.querySelectorAll('[quiz-name]');
 
-btn.style.pointerEvents = 'none';
-btn.style.opacity = '0.5';
-
-    
-// if input is empty do nothing else enable button
-
-input.addEventListener('input', function() {
-    if (input.value === '') {
-        btn.style.pointerEvents = 'none';
-        btn.style.opacity = '0.5';
-    } else {
-        btn.style.pointerEvents = 'auto';
-        btn.style.opacity = '1';
-    }
-})
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.5';
 
 
-btn.addEventListener('click', function() {
-    names.forEach(name => {
-        name.textContent = input.value;
+    // if input is empty do nothing else enable button
+
+    input.addEventListener('input', function () {
+        if (input.value === '') {
+            btn.style.pointerEvents = 'none';
+            btn.style.opacity = '0.5';
+        } else {
+            btn.style.pointerEvents = 'auto';
+            btn.style.opacity = '1';
+        }
     })
-});
+
+
+    btn.addEventListener('click', function () {
+        names.forEach(name => {
+            name.textContent = input.value;
+        })
+    });
 }
 
 if (document.querySelector('.swiper.is-product')) {
-let productSwiper = new Swiper ('.swiper.is-product', {
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper_slide',
-    loop: true,
-    effect: "slide", 
-    slidesPerView: 1, 
-    speed: 350, 
+    let productSwiper = new Swiper('.swiper.is-product', {
+        wrapperClass: 'swiper_wrapper',
+        slideClass: 'swiper_slide',
+        loop: true,
+        effect: "slide",
+        slidesPerView: 1,
+        speed: 350,
 
-    pagination: {
-        el: '.ourproducts-tabs_links',
-        clickable: true,
-        bulletClass: 'button is-tab',
-        bulletActiveClass: 'is-active',
-        renderBullet: function (index, className) {
-            // Get the slide corresponding to the index
-            let slide = this.slides[index];
-            // Get the value of the data-slide-name attribute
-            let slideName = slide.getAttribute('data-slide-name');
-            // Create a new bullet element
-            return '<span class="' + className + '" data-slide-name="' + slideName + '">' + slideName + '</span>';
+        pagination: {
+            el: '.ourproducts-tabs_links',
+            clickable: true,
+            bulletClass: 'button is-tab',
+            bulletActiveClass: 'is-active',
+            renderBullet: function (index, className) {
+                // Get the slide corresponding to the index
+                let slide = this.slides[index];
+                // Get the value of the data-slide-name attribute
+                let slideName = slide.getAttribute('data-slide-name');
+                // Create a new bullet element
+                return '<span class="' + className + '" data-slide-name="' + slideName + '">' + slideName + '</span>';
+            },
         },
-    },
 
     });
 }
 
 if (document.querySelector('.swiper.is-why')) {
 
-let whySwiper = new Swiper('.swiper.is-why', {
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper_slide',
-    effect: "fade",
-    fadeEffect: {
-        crossFade: true
-    },
-    mousewheel: true,
+    let whySwiper = new Swiper('.swiper.is-why', {
+        wrapperClass: 'swiper_wrapper',
+        slideClass: 'swiper_slide',
+        effect: "fade",
+        fadeEffect: {
+            crossFade: true
+        },
+        mousewheel: true,
 
-    pagination: {
-      el: '.swiper_pagination-wrapper.is-vertical',
-      clickable: true,
-      bulletClass:  'swiper_dot',
-        bulletActiveClass: 'is-active'
-    }
-});
+        pagination: {
+            el: '.swiper_pagination-wrapper.is-vertical',
+            clickable: true,
+            bulletClass: 'swiper_dot',
+            bulletActiveClass: 'is-active'
+        }
+    });
 
 }
-    let envelope = gsap.timeline();
+let envelope = gsap.timeline();
 
-    envelope.to('.envolope.top',{
-        rotateX: 180,
-        duration: 2,
+envelope.to('.envolope.top', {
+    rotateX: 180,
+    duration: 2,
+    ease: "power4.inOut",
+    scrollTrigger: {
+        trigger: '.envolope.top',
+        start: "top 80%",
+        end: "top 60%",
+        scrub: 1
+    },
+
+})
+
+const dogPhotos = document.querySelectorAll('.polaroid');
+
+dogPhotos.forEach((photo) => {
+    gsap.from(photo, {
+        top: "25%",
+        left: "25%",
+        bottom: "25%",
+        right: "25%",
+        scale: 0,
+        duration: 1.5,
         ease: "power4.inOut",
+        stagger: 1,
         scrollTrigger: {
             trigger: '.envolope.top',
             start: "top 80%",
-            end: "top 60%",
-            scrub: 1
+            end: "top 50%",
+
         },
-        
-    })
 
-    const dogPhotos = document.querySelectorAll('.polaroid');
+    });
+});
 
-            dogPhotos.forEach((photo) => {
-                gsap.from(photo, {
-                    top: "25%",
-                    left: "25%",
-                    bottom: "25%",
-                    right: "25%",
-                    scale: 0,
-                    duration: 1.5,
-                    ease: "power4.inOut",
-                    stagger: 1,
-                    scrollTrigger: {
-                        trigger: '.envolope.top',
-                        start: "top 80%",
-                        end: "top 50%",
-                        
-                    },
-                    
-                });
-            });
-            
-   
 
-            gsap.from(".star", {
-                scale: 0,
-                duration: 0.2,
-                ease: "power4.inOut",
-                stagger: {
-                  each: 0.05,
-                  from: "random"
-                },
-                
-                ease: "power2.inOut",
-                scrollTrigger: {
-                    trigger: ".section_home-club",
-                    start: "top 60%", // Change this according to your needs
-                    end: "bottom center", // Change this according to your needs
-                 
-                  },
 
-              });
+gsap.from(".star", {
+    scale: 0,
+    duration: 0.2,
+    ease: "power4.inOut",
+    stagger: {
+        each: 0.05,
+        from: "random"
+    },
+
+    ease: "power2.inOut",
+    scrollTrigger: {
+        trigger: ".section_home-club",
+        start: "top 60%", // Change this according to your needs
+        end: "bottom center", // Change this according to your needs
+
+    },
+
+});
+
+
+
+// BARK SOUND
+
+const barkElements = document.querySelectorAll('[bark]');
+
+// Function to play bark sound
+function playBarkSound() {
+    // Create an audio element
+    const audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/bark.mp3');
+    // Play the audio
+    audio.play();
+}
+
+// Add click event listener to each element
+barkElements.forEach(function (element) {
+    element.addEventListener('click', playBarkSound);
+});

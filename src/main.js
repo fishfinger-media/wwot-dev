@@ -499,3 +499,18 @@ function playBarkSound() {
 barkElements.forEach(function (element) {
     element.addEventListener('click', playBarkSound);
 });
+
+
+// home swiper
+
+let homeSwiper = new Swiper('.swiper.is-home', {
+
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    slidesPerView: 1,
+    loop: true,
+    autoplay: {
+        delay: 5000,
+    },
+    
+});

@@ -15,6 +15,7 @@ if (document.querySelector('.section_home-hero')) {
 let playSound = false;
 let audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
+
 gsap.set('.navigation',{yPercent: -100});
 
 var animation = bodymovin.loadAnimation({
@@ -303,6 +304,7 @@ let teamSwiper = new Swiper('.swiper.is-team', {
 // QUIZ
 if (document.querySelector('.section_quiz')) {
 
+
 let quizSwiper = new Swiper('.swiper.is-quiz', { 
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
@@ -349,6 +351,49 @@ btn.addEventListener('click', function() {
 });
 }
 
+if (document.querySelector('.swiper.is-product')) {
+let productSwiper = new Swiper ('.swiper.is-product', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+    effect: "slide", 
+    slidesPerView: 1, 
+    speed: 350, 
+
+    pagination: {
+        el: '.ourproducts-tabs_links',
+        clickable: true,
+        bulletClass: 'button is-tab',
+        bulletActiveClass: 'is-active',
+        renderBullet: function (index, className) {
+            // Get the slide corresponding to the index
+            let slide = this.slides[index];
+            // Get the value of the data-slide-name attribute
+            let slideName = slide.getAttribute('data-slide-name');
+            // Create a new bullet element
+            return '<span class="' + className + '" data-slide-name="' + slideName + '">' + slideName + '</span>';
+        },
+    },
+
+    });
+}
+
+let whySwiper = new Swiper('.swiper.is-why', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    effect: "fade",
+    fadeEffect: {
+        crossFade: true
+    },
+    mousewheel: true,
+
+    pagination: {
+      el: '.swiper_pagination-wrapper.is-vertical',
+      clickable: true,
+      bulletClass:  'swiper_dot',
+        bulletActiveClass: 'is-active'
+    }
+});
 
 
     let envelope = gsap.timeline();
@@ -360,21 +405,34 @@ btn.addEventListener('click', function() {
         scrollTrigger: {
             trigger: '.envolope.top',
             start: "top 80%",
-            end: "top 50%",
+            end: "top 60%",
             scrub: 1
-        }
+        },
+        
     })
 
-    let dogPhotos = document.querySelectorAll('.polaroid');
+    const dogPhotos = document.querySelectorAll('.polaroid');
 
-    dogPhotos.forEach((photo) => {
-        gsap.from(photo, {
-            scale: 0,
-            duration: 1,
-            ease: "back",
-           
-        });
-    });
-    
+            dogPhotos.forEach((photo) => {
+                gsap.from(photo, {
+                    top: "25%",
+                    left: "25%",
+                    bottom: "25%",
+                    right: "25%",
+                    scale: 0,
+                    duration: 1.5,
+                    ease: "power4.inOut",
+                    stagger: 1,
+                    scrollTrigger: {
+                        trigger: '.envolope.top',
+                        start: "top 80%",
+                        end: "top 50%",
+                        
+                    },
+                    
+                });
+            });
+            
+   
 
 

@@ -26,16 +26,16 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
-// Check if the user has already decided to skip the loader
-var skipLoader = localStorage.getItem('skipLoader');
 
-if (!skipLoader && document.querySelector('.section_home-intro')) {
+if (document.querySelector('.section_home-intro')) {
+
     var animation = bodymovin.loadAnimation({
         container: document.querySelector('.home-intro_lottie-container'),
         renderer: 'svg',
         loop: false,
         autoplay: false,
         path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json',
+
     });
 
     function loader() {
@@ -51,10 +51,6 @@ if (!skipLoader && document.querySelector('.section_home-intro')) {
             yPercent: -100,
             duration: 1.4,
             ease: "power4.inOut",
-            onComplete: function() {
-                // Hide the .home_intro element after animation completes
-                document.querySelector('.home_intro').style.display = 'none';
-            }
         }, "+4");
         gsap.from('.navigation', {
             yPercent: -100,
@@ -78,21 +74,14 @@ if (!skipLoader && document.querySelector('.section_home-intro')) {
 
     const loaderBtnTrue = document.querySelector('[play-sound="true"]').addEventListener('click', function () {
         playSound = true;
-        localStorage.setItem('skipLoader', 'true');
         loader();
     });
 
     const loaderBtnFalse = document.querySelector('[play-sound="false"]').addEventListener('click', function () {
         playSound = false;
-        localStorage.setItem('skipLoader', 'true');
         loader();
     });
-} else {
-    // If the user has previously decided to skip the loader,
-    // hide the .home_intro element
-    document.querySelector('.home_intro').style.display = 'none';
 }
-
 
 // DOG BARKS 
 const dogBarks = document.querySelectorAll('[dog-bark]');
@@ -454,6 +443,7 @@ if (document.querySelector('.swiper.is-story')) {
         wrapperClass: 'swiper_wrapper',
         slideClass: 'swiper_slide',
         loop: true,
+        slidesPerView: 1,
         effect: "fade",
         fadeEffect: {
             crossFade: true
@@ -500,9 +490,27 @@ if (document.querySelector('.swiper.is-team')) {
         },
 
     });
+
+    const popups = document.querySelectorAll('.team_popup-message');
+    let currentPopup = null;
+
+    popups.forEach(popup => {
+    popup.parentElement.addEventListener('click', () => {
+        if (currentPopup && currentPopup !== popup) {
+        gsap.to(currentPopup, { duration: 0.3, scale: 0 });
+        }
+
+        const isOpen = popup.style.transform === 'translate(-50%, -50%) scale(1)';
+        currentPopup = isOpen ? null : popup;
+
+        gsap.to(popup, { duration: 0.3, scale: isOpen ? 0 : 1 });
+    });
+    });
+
 }
 
 // BOAT 
+
 function animateBoat() {
     gsap.timeline({
             repeat: -1,
@@ -554,3 +562,19 @@ function animateBoatAlt() {
     });
 }
 animateBoatAlt();
+
+
+let newsSwiper = new Swiper('.swiper.is-news', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+    slidesPerView: 5.2,
+    spaceBetween: 20,
+    slidesOffsetBefore: 80,
+
+    navigation: {
+        nextEl: '.swiper_nav.is-next',
+        prevEl: '.swiper_nav.is-prev',
+    },
+});
+

@@ -11,15 +11,14 @@ import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
 const lenis = new Lenis()
 
-
 function raf(time) {
     lenis.raf(time)
     requestAnimationFrame(raf)
 }
-
 requestAnimationFrame(raf)
 
 let playSound = false;
+
 // INTRO
 if (document.querySelector('.section_home-hero')) {
 
@@ -138,8 +137,6 @@ polaroids.forEach(polaroid => {
         }
     });
 });
-
-
 
 // Swiper 
 
@@ -324,8 +321,6 @@ dogPhotos.forEach((photo) => {
     });
 });
 
-
-
 gsap.from(".star", {
     scale: 0,
     duration: 0.2,
@@ -344,8 +339,6 @@ gsap.from(".star", {
     },
 
 });
-
-
 
 // BARK SOUND
 
@@ -369,7 +362,6 @@ barkElements.forEach(function (element) {
 
 if (document.querySelector('.section_home-hero')) {
    
-
 
 let homeSwiper = new Swiper('.swiper.is-home', {
 
@@ -456,4 +448,15 @@ stickers.forEach(sticker => {
             ease: "back.inOut(1.8)" // Adjust easing function as needed
         });
     });
+});
+
+
+
+const popups = document.querySelectorAll('.team_popup-message');
+
+popups.forEach(popup => {
+  popup.parentElement.addEventListener('click', () => {
+    const isOpen = popup.style.transform === 'translate(-50%, -50%) scale(1)';
+    gsap.to(popup, { duration: 0.3, scale: isOpen ? 0 : 1 });
+  });
 });

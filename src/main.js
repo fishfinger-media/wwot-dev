@@ -20,6 +20,7 @@ function raf(time) {
 }
 requestAnimationFrame(raf)
 
+
 let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
@@ -123,14 +124,34 @@ if (document.querySelector('.section_home-hero')) {
 
     });
 
+
+
     let buttonsNext = document.querySelectorAll('.hero_slide-nav.is-next');
     let buttonsPrev = document.querySelectorAll('.hero_slide-nav.is-prev');
 
+
+
     buttonsNext.forEach(function (button) {
         button.addEventListener('click', function () {
-            homeSwiper.slideNext();
+
+
+            gsap.to('.home-hero_fader', {
+                xPercent: -200,
+                duration: 1.6,
+                ease: "power1.inout"
+            });
+            
+            gsap.delayedCall(-0.8, () => {
+                homeSwiper.slideNext();
+            });
+
+
+          
         });
     });
+
+
+            
 
     buttonsPrev.forEach(function (button) {
         button.addEventListener('click', function () {

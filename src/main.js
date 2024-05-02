@@ -26,7 +26,6 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
-
 if (document.querySelector('.section_home-intro')) {
 
     var animation = bodymovin.loadAnimation({
@@ -344,6 +343,15 @@ if (document.querySelector('.footer')) {
         }
     })
 
+    gsap.from('.footer_boat',{
+        xPercent: 150,
+        duration: 4,
+        ease: "power4.inOut",
+        scrollTrigger: {
+            trigger: '.footer',
+            start: "top 80%",
+        }
+    })
 
 }
 
@@ -509,8 +517,39 @@ if (document.querySelector('.swiper.is-team')) {
 
 }
 
-// BOAT 
+// NEWS SLIDER
+let newsSwiper = new Swiper('.swiper.is-news', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+    slidesPerView: 5.2,
+    spaceBetween: 20,
+    slidesOffsetBefore: 80,
 
+    navigation: {
+        nextEl: '.swiper_nav.is-next',
+        prevEl: '.swiper_nav.is-prev',
+    },
+});
+
+// MUSIC CONTROL
+if (document.querySelector('.music_control')) {
+
+    const musicControl = document.querySelector('.music_control');
+    const audioIcon = document.getElementById('audio-icon');
+
+    musicControl.addEventListener('click', function () {
+        if (music.paused) {
+            music.play();
+            audioIcon.src = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f68e8cce0ba76b5e15_icon_vol-off.svg';
+        } else {
+            music.pause();
+            audioIcon.src = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f66fa8b47bafdf14a7_icon_vol-on.svg';
+        }
+    });
+}
+
+// BOAT 
 function animateBoat() {
     gsap.timeline({
             repeat: -1,
@@ -563,18 +602,14 @@ function animateBoatAlt() {
 }
 animateBoatAlt();
 
-
-let newsSwiper = new Swiper('.swiper.is-news', {
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper_slide',
-    loop: true,
-    slidesPerView: 5.2,
-    spaceBetween: 20,
-    slidesOffsetBefore: 80,
-
-    navigation: {
-        nextEl: '.swiper_nav.is-next',
-        prevEl: '.swiper_nav.is-prev',
-    },
-});
-
+// NAVIGATION
+let navSize = gsap.timeline({
+    scrollTrigger: {
+        trigger: '.navigation',
+        start: "bottom top",
+        toggleActions: "play none none reverse"
+    }
+})
+navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
+navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
+navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")

@@ -1,0 +1,8 @@
+.swiper_slide {
+    width: 33%;
+}
+
+.swiper_slide img {
+    object-fit: contain;
+    
+}

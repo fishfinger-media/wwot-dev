@@ -532,6 +532,301 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     },
 });
 
+// PRODUCT SWIPER
+if (document.querySelector('.swiper.is-product')) {
+    let productSwiper = new Swiper('.swiper.is-product', {
+        wrapperClass: 'swiper_wrapper',
+        slideClass: 'swiper_slide',
+        loop: true,
+        allowTouchMove: false,
+        effect: "slide",
+        slidesPerView: 1,
+        speed: 350,
+
+        pagination: {
+            el: '.ourproducts-tabs_links',
+            clickable: true,
+            bulletClass: 'button is-tab',
+            bulletActiveClass: 'is-active',
+            renderBullet: function (index, className) {
+                // Get the slide corresponding to the index
+                let slide = this.slides[index];
+                // Get the value of the data-slide-name attribute
+                let slideName = slide.getAttribute('data-slide-name');
+                // Create a new bullet element
+                return '<span class="' + className + '" data-slide-name="' + slideName + '">' + slideName + '</span>';
+            },
+        },
+
+    });
+}
+
+
+let productOne = document.querySelectorAll('.ourproducts_img.is-1');
+let productTwo = document.querySelectorAll('.ourproducts_img.is-2');
+let productThree = document.querySelectorAll('.ourproducts_img.is-3');
+
+let productLabelOne = document.querySelectorAll('.ourproducts_label.is-1');
+let productLabelTwo = document.querySelectorAll('.ourproducts_label.is-2');
+let productLabelThree = document.querySelectorAll('.ourproducts_label.is-3');
+
+let isClicked = false;
+
+// when i click on product two shrink .ourproducts_tabs-container to 50%
+
+
+productOne.forEach(productOne => {
+    productOne.addEventListener('click', function () {
+        
+        if (isClicked === false) {
+
+    
+            gsap.to('.ourproducts_tabs-container', {
+                width: '80%',
+                duration: 0.8,
+                ease: "power4.inOut", 
+            });
+            gsap.to(productOne, {
+                scale: 1.3,
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut",
+                
+
+            })
+            gsap.to(productTwo, {
+                scale: 0.8,
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut",
+                
+
+            })
+            gsap.to(productThree, {
+                scale: 0.8,
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut",
+            
+
+
+            })
+            gsap.to(productLabelOne, {
+                scale: 1,
+                duration: 0.8,
+                ease: "power4.inOut",
+                
+
+            })
+    
+            isClicked = true;
+        } else {
+
+            gsap.to('.ourproducts_tabs-container', {
+                width: '100%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+            gsap.to(productOne, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut",
+            
+
+            })
+            gsap.to(productTwo, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productThree, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productLabelOne, {
+                scale: 0,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+    
+            isClicked = false;
+        }
+
+    });
+});
+
+
+productTwo.forEach(productTwo => {
+    productTwo.addEventListener('click', function () {
+        
+        if (isClicked === false) {
+
+            gsap.to('.ourproducts_tabs-container', {
+                width: '80%',
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+            gsap.to(productOne, {
+                scale: 0.8,
+                marginRight: '-10%',
+    
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productThree, {
+                scale: 0.8,
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productTwo, {
+                scale: 1.3,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productLabelTwo, {
+                scale: 1,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+    
+            isClicked = true;
+        } else {
+
+            gsap.to('.ourproducts_tabs-container', {
+                width: '100%',
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+            gsap.to(productOne, {
+                scale: 1,
+                marginRight: '0%',
+    
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productThree, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productTwo, {
+                scale: 1,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            gsap.to(productLabelTwo, {
+                scale: 0,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+    
+            isClicked = false;
+        }
+
+    });
+});
+
+
+productThree.forEach(productThree => {
+
+    productThree.addEventListener('click', function () {
+
+        if (isClicked === false) {
+        
+            gsap.to('.ourproducts_tabs-container', {
+                width: '80%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+
+            gsap.to(productOne, {
+                scale: 0.8,
+                marginLeft: '-30%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            
+            gsap.to(productTwo, {
+                scale: 0.8,
+                marginLeft: '-20%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+
+            gsap.to(productThree, {
+                scale: 1.3,
+                marginLeft: '-10%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+
+            gsap.to(productLabelThree, {
+                scale: 1,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+        
+            isClicked = true;
+        }
+    
+        else {
+
+           
+            gsap.to('.ourproducts_tabs-container', {
+                width: '100%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+
+            gsap.to(productOne, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+            
+            gsap.to(productTwo, {
+                scale: 1,
+                marginLeft: '0%',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+
+            gsap.to(productThree, {
+                scale: 1,
+                marginLeft: '-0',
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+
+            gsap.to(productLabelThree, {
+                scale: 0,
+                duration: 0.8,
+                ease: "power4.inOut"
+            })
+
+            isClicked = false;
+        }
+    }
+    )
+}
+
+);
+
+
+
+
+
+
+
 // MUSIC CONTROL
 if (document.querySelector('.music_control')) {
 

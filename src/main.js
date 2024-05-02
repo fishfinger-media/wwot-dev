@@ -3,13 +3,14 @@ import './styles/style.css'
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
 import bodymovin from 'lottie-web';
 import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
 
-gsap.registerPlugin(ScrollTrigger, Draggable);
+gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin);
 
 // LENIS
 const lenis = new Lenis()
@@ -25,15 +26,16 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
-if (document.querySelector('.section_home-intro')) {
+// Check if the user has already decided to skip the loader
+var skipLoader = localStorage.getItem('skipLoader');
 
+if (!skipLoader && document.querySelector('.section_home-intro')) {
     var animation = bodymovin.loadAnimation({
         container: document.querySelector('.home-intro_lottie-container'),
         renderer: 'svg',
         loop: false,
         autoplay: false,
         path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json',
-
     });
 
     function loader() {
@@ -49,6 +51,10 @@ if (document.querySelector('.section_home-intro')) {
             yPercent: -100,
             duration: 1.4,
             ease: "power4.inOut",
+            onComplete: function() {
+                // Hide the .home_intro element after animation completes
+                document.querySelector('.home_intro').style.display = 'none';
+            }
         }, "+4");
         gsap.from('.navigation', {
             yPercent: -100,
@@ -72,15 +78,21 @@ if (document.querySelector('.section_home-intro')) {
 
     const loaderBtnTrue = document.querySelector('[play-sound="true"]').addEventListener('click', function () {
         playSound = true;
+        localStorage.setItem('skipLoader', 'true');
         loader();
     });
 
     const loaderBtnFalse = document.querySelector('[play-sound="false"]').addEventListener('click', function () {
         playSound = false;
+        localStorage.setItem('skipLoader', 'true');
         loader();
     });
-
+} else {
+    // If the user has previously decided to skip the loader,
+    // hide the .home_intro element
+    document.querySelector('.home_intro').style.display = 'none';
 }
+
 
 // DOG BARKS 
 const dogBarks = document.querySelectorAll('[dog-bark]');
@@ -309,21 +321,25 @@ if (document.querySelector('.section_quiz')) {
 if (document.querySelector('.star')) {
     gsap.from(".star", {
         scale: 0,
-        duration: 0.7,
+        duration: 0.9,
         ease: "power4.inOut",
         stagger: {
             each: 0.05,
             from: "random"
         },
-
-        ease: "power2.inOut",
         scrollTrigger: {
             trigger: ".section_home-club",
             start: "top 80%",
-
         },
-
     });
+    
+    // GSAP animation for continuously rotating the stars with stop-framey effect
+    gsap.to(".star", {
+        duration: 0.6, // Adjust the duration for the desired speed of rotation
+        rotation: () => Math.random() * 30 - 15, // Random rotation between -15 and 15 degrees
+        repeat: -1, // Repeat indefinitely
+        yoyo: true, // Reverse the rotation direction
+        ease: "steps(1)",    });
 }
 
 // FOOTER
@@ -343,62 +359,36 @@ if (document.querySelector('.footer')) {
 }
 
 // STICKER
-if (document.querySelector('.section_quiz')) {
+if (document.querySelector('.sticker')) {
+    const stickers = document.querySelectorAll('.sticker');
 
-    const images = [
-        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b9376d45d6c1b0c9c2150_image_sticker-cake.svg',
-        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b937653bf01ff60b02136_image_sticker-sushi.svg',
-        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b93766fb299910bb7eada_image_sticker-pizza.svg',
-        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b9376f7e1bec63eae97db_image_sticker-balloon.svg'
-    ];
-
-    // Preload images
-    const preloadImages = () => {
-        images.forEach(image => {
-            const img = new Image();
-            img.src = image;
+    function scaleSticker(sticker, scaleValue) {
+        gsap.to(sticker, { scale: scaleValue, duration: 0.2 });
+    }
+    
+    stickers.forEach(sticker => {
+        Draggable.create(sticker, {
+            bounds: ".page_wrapper",
+            inertia: true,
+            onDragStart: function() {
+                scaleSticker(this.target, 0.9);
+            },
+            onDragEnd: function() {
+                scaleSticker(this.target, 1);
+            }
         });
-    };
-
-    preloadImages();
-
-    const quizContent = document.querySelector('[data-sticker-area]');
-
-    document.addEventListener('click', function (event) {
-        if (event.target.closest('[data-sticker-area]')) {
-            const randomImage = images[Math.floor(Math.random() * images.length)];
-            const sticker = document.createElement('img');
-            sticker.src = randomImage;
-            sticker.classList.add('sticker');
-
-            const rotation = Math.floor(Math.random() * 13) * 5 - 30;
-            sticker.style.transform = `rotate(${rotation}deg)`;
-
-            const rect = quizContent.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-
-            sticker.style.left = `${x}px`;
-            sticker.style.top = `${y}px`;
-
-            quizContent.appendChild(sticker);
-
-            // GSAP animation
-            gsap.from(sticker, {
-                duration: 0.5,
-                scale: 0,
-                opacity: 0,
-                ease: "elastic.inOut(1.4,1)",
-                onComplete: function () {
-                    // Rotate after the animation completes
-                    gsap.to(sticker, {
-                        duration: 0,
-                        rotation: rotation,
-                    });
-                }
-            });
-        }
+    
+        sticker.addEventListener('mouseenter', function() {
+            scaleSticker(this, 1.1);
+        });
+    
+        sticker.addEventListener('mouseleave', function() {
+            scaleSticker(this, 1);
+        });
     });
+    
+
+
 }
 
 // ENVELOPE

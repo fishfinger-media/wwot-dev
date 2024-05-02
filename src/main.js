@@ -133,17 +133,7 @@ if (document.querySelector('.section_home-hero')) {
 
     buttonsNext.forEach(function (button) {
         button.addEventListener('click', function () {
-
-
-            gsap.to('.home-hero_fader', {
-                xPercent: -200,
-                duration: 1.6,
-                ease: "power1.inout"
-            });
-            
-            gsap.delayedCall(-0.8, () => {
-                homeSwiper.slideNext();
-            });
+            homeSwiper.slideNext();
 
 
           

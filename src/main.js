@@ -12,15 +12,13 @@ import { Navigation, Pagination } from 'swiper/modules';
 gsap.registerPlugin(ScrollTrigger, Draggable);
 
 // LENIS
-
 const lenis = new Lenis()
-
 function raf(time) {
-  lenis.raf(time)
-  requestAnimationFrame(raf)
+    lenis.raf(time) 
+    requestAnimationFrame(raf)
 }
-
 requestAnimationFrame(raf)
+
 
 // HERO SLIDER
 if (document.querySelector('.section_home-hero')) {
@@ -32,7 +30,7 @@ if (document.querySelector('.section_home-hero')) {
         simulateTouch: false,
         parallax: true,
         loop: true,
-    
+
     });
 
     let buttonsNext = document.querySelectorAll('.hero_slide-nav.is-next');
@@ -43,11 +41,11 @@ if (document.querySelector('.section_home-hero')) {
             homeSwiper.slideNext();
         });
     });
-    
+
     buttonsPrev.forEach(function (button) {
         button.addEventListener('click', function () {
-                homeSwiper.slidePrev();
-            })
+            homeSwiper.slidePrev();
+        })
     });
 
 
@@ -57,28 +55,45 @@ if (document.querySelector('.section_home-hero')) {
             let popupImage = popup.querySelector('.home-popup_postcard-character');
             let popupLetter = popup.querySelector('.home-popup_postcard');
             popup.style.display = 'flex';
-            gsap.fromTo(popup, { opacity: 0 }, { opacity: 1, duration: 0.5 });
-            gsap.from(popupImage,{ yPercent:-100, duration: 1.5, ease: "back" });
-            gsap.from(popupLetter, { yPercent: 100, duration: 1.5, ease: "back" })
-            
+            gsap.fromTo(popup, {
+                opacity: 0
+            }, {
+                opacity: 1,
+                duration: 0.5
+            });
+            gsap.from(popupImage, {
+                yPercent: -100,
+                duration: 1.5,
+                ease: "back"
+            });
+            gsap.from(popupLetter, {
+                yPercent: 100,
+                duration: 1.5,
+                ease: "back"
+            })
+
         });
     });
-    
-    
+
+
     document.querySelectorAll('[data-popup]').forEach(popup => {
         popup.addEventListener('click', function () {
             let popupImage = popup.querySelector('.home-popup_postcard-character');
             let popupLetter = popup.querySelector('.home-popup_postcard');
-    
-            gsap.to(this, { opacity: 0, duration: 0.5, onComplete: () => {
-                this.style.display = 'none';
-            }});
-    
+
+            gsap.to(this, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    this.style.display = 'none';
+                }
+            });
+
         });
     });
 
-    
-    
+
+
 };
 
 // SPLIT TEXT
@@ -199,21 +214,21 @@ if (document.querySelector('.star')) {
             each: 0.05,
             from: "random"
         },
-    
+
         ease: "power2.inOut",
         scrollTrigger: {
             trigger: ".section_home-club",
-            start: "top 80%", 
-    
+            start: "top 80%",
+
         },
-    
+
     });
 }
 
 // FOOTER
 if (document.querySelector('.footer')) {
 
-    gsap.from('.newsletter_container',{
+    gsap.from('.newsletter_container', {
         yPercent: 100,
         duration: 1.5,
         ease: "power4.inOut",
@@ -223,8 +238,184 @@ if (document.querySelector('.footer')) {
         }
     })
 
- 
+
 }
 
+// STICKER
+if (document.querySelector('.section_quiz')) {
+
+    const images = [
+        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b9376d45d6c1b0c9c2150_image_sticker-cake.svg',
+        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b937653bf01ff60b02136_image_sticker-sushi.svg',
+        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b93766fb299910bb7eada_image_sticker-pizza.svg',
+        'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/662b9376f7e1bec63eae97db_image_sticker-balloon.svg'
+    ];
+
+    // Preload images
+    const preloadImages = () => {
+        images.forEach(image => {
+            const img = new Image();
+            img.src = image;
+        });
+    };
+
+    preloadImages();
+
+    const quizContent = document.querySelector('[data-sticker-area]');
+
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('[data-sticker-area]')) {
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            const sticker = document.createElement('img');
+            sticker.src = randomImage;
+            sticker.classList.add('sticker');
+
+            const rotation = Math.floor(Math.random() * 13) * 5 - 30;
+            sticker.style.transform = `rotate(${rotation}deg)`;
+
+            const rect = quizContent.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            sticker.style.left = `${x}px`;
+            sticker.style.top = `${y}px`;
+
+            quizContent.appendChild(sticker);
+
+            // GSAP animation
+            gsap.from(sticker, {
+                duration: 0.5,
+                scale: 0,
+                opacity: 0,
+                ease: "elastic.inOut(1.4,1)",
+                onComplete: function () {
+                    // Rotate after the animation completes
+                    gsap.to(sticker, {
+                        duration: 0,
+                        rotation: rotation,
+                    });
+                }
+            });
+        }
+    });
+}
+
+// ENVELOPE
+if (document.querySelector('.envelope_card-wrapper')) {
+
+var envelopeAnimation = gsap.timeline()
+
+envelopeAnimation.to('.envelope.top', {
+    rotateX: -180,
+    duration: 1.5,
+    ease: "power4.inOut",
+})
+
+envelopeAnimation.from('.envelope_card-wrapper',{
+    scale:0,
+    duration: 0.8,
+    ease: "power4.inOut",
+    stagger: {
+        amount: 0.1,
+        from: "center"
+    }
+}, "-=1")
 
 
+ScrollTrigger.create ( {
+    animation: envelopeAnimation,
+    trigger: '.envelope_content',
+    start: "top 80%",
+    toggleActions: "play none none reverse"
+
+});
+
+const wrappers = document.querySelectorAll('.envelope_card-wrapper');
+
+wrappers.forEach(wrapper => {
+    const content = wrapper.querySelector('.envelope_card-content');
+    gsap.set(content, { transformStyle: "preserve-3d" });
+
+    wrapper.addEventListener('mouseenter', () => {
+        gsap.to(content, { rotationY: 180, duration: 0.5, ease: "power2.inOut" });
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+        gsap.to(content, { rotationY: 0, duration: 0.5, ease: "power2.inOut" });
+    });
+});
+}
+
+// STORY SLIDER
+if (document.querySelector('.swiper.is-story')) {
+
+let storySwiper = new Swiper('.swiper.is-story', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+    effect: "fade",
+    fadeEffect: {
+        crossFade: true
+    },
+
+    navigation: {
+        nextEl: '.swiper_nav.is-next',
+        prevEl: '.swiper_nav.is-prev',
+    },
+
+    pagination: {
+        el: '.swiper_pagination-wrapper',
+        clickable: true,
+        bulletClass: 'swiper_story-dot',
+        bulletActiveClass: 'is-active'
+    }
+});
+}
+
+// TEAM SLIDER
+if (document.querySelector('.swiper.is-team')) {
+
+let teamSwiper = new Swiper('.swiper.is-team', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: true,
+
+    spaceBetween: 50,
+
+    navigation: {
+        nextEl: '.swiper_nav.is-next',
+        prevEl: '.swiper_nav.is-prev',
+    },
+
+    breakpoints: {
+        992: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+        },
+        991: {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+        },
+    },
+
+});
+}
+
+// BOAT 
+function animateBoat() {
+    gsap.timeline({ repeat: -1, yoyo: true })
+      .to("#boat", { duration: 2, y: -30, ease: "power1.inOut" })
+      .to("#boat", { duration: 2, y: -10, ease: "power1.inOut" });
+      
+    gsap.to("#boat", { duration: 4, x: "-=20", repeat: -1, yoyo: true, ease: "power1.inOut" });
+  }
+  animateBoat();
+
+  function animateBoatAlt() {
+    gsap.timeline({ repeat: -1, yoyo: true })
+      .to("#boatAlt", { duration: 2.5, y: -20, ease: "power1.inOut" })
+      .to("#boatAlt", { duration: 2.5, y: -6, ease: "power1.inOut" });
+      
+    gsap.to("#boatAlt", { duration: 4, x: "-=23", repeat: -1, yoyo: true, ease: "power1.inOut" });
+  }
+  animateBoatAlt();

@@ -533,7 +533,7 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
     loop: true,
-    slidesPerView: 5.2,
+    
     spaceBetween: 20,
     slidesOffsetBefore: 80,
 
@@ -552,7 +552,7 @@ let newsSwiper = new Swiper('.swiper.is-news', {
         },
     },
     768 : {
-        slidesPerView: 2,
+        slidesPerView: 1,
     },
 });
 

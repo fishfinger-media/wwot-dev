@@ -932,8 +932,8 @@ productThree.forEach(productThree => {
         speed: 400,
 
         navigation :{
-            nextEl: '.ourProducts-inner_nav.is-right',
-            prevEl: '.ourProducts-inner_nav.is-left',
+            nextEl: '.ourproducts-inner_nav.is-right',
+            prevEl: '.ourproducts-inner_nav.is-left',
         }
     });
 }

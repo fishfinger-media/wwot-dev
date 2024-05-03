@@ -26,7 +26,6 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
-
 if (document.querySelector('.section_home-intro')) {
 
     var animation = bodymovin.loadAnimation({
@@ -35,7 +34,6 @@ if (document.querySelector('.section_home-intro')) {
         loop: false,
         autoplay: false,
         path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json',
-
     });
 
     function loader() {
@@ -52,11 +50,16 @@ if (document.querySelector('.section_home-intro')) {
             duration: 1.4,
             ease: "power4.inOut",
         }, "+4");
-        gsap.from('.navigation', {
-            yPercent: -100,
-            duration: 1.4,
-            ease: "power4.inOut"
-        }, "-=1");
+
+        // Run navigation GSAP animations only on screens 991px and higher
+        if (window.innerWidth >= 992) {
+            gsap.from('.navigation', {
+                yPercent: -100,
+                duration: 1.4,
+                ease: "power4.inOut"
+            }, "-=1");
+        }
+
         gsap.from('.home-hero_slide', {
             yPercent: 30,
             duration: 1.4,
@@ -82,6 +85,7 @@ if (document.querySelector('.section_home-intro')) {
         loader();
     });
 }
+
 
 
 
@@ -911,6 +915,29 @@ productThree.forEach(productThree => {
     });
 }
 
+// MOBILE HOME SLIDER
+
+if (window.matchMedia("(max-width: 991px)").matches) {
+    if (document.querySelector('.swiper.is-mobile-hero')) {
+
+        let mobileSwiper = new Swiper('.swiper.is-mobile-hero', {
+            wrapperClass: 'swiper_wrapper',
+            slideClass: 'swiper_slide',
+            loop: true,
+            slidesPerView: 1,
+            speed: 800,
+            autoplay: {
+                delay: 5000,
+
+            },
+            navigation:{
+                nextEl: '.swiper-mobile_nav.is-right',
+                prevEl: '.swiper-mobile_nav.is-left',
+            }
+        });
+
+    };
+}
 
 // MUSIC CONTROL
 if (document.querySelector('.music_control')) {
@@ -983,16 +1010,22 @@ function animateBoatAlt() {
 animateBoatAlt();
 
 // NAVIGATION
-let navSize = gsap.timeline({
-    scrollTrigger: {
-        trigger: '.navigation',
-        start: "bottom top",
-        toggleActions: "play none none reverse"
-    }
-})
-navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
-navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
-navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
+
+    let navSize = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.navigation',
+            start: "bottom top",
+            toggleActions: "play none none reverse"
+        }
+    })
+
+    navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
+    navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
+    navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
+
+
+
+
 
 // EDEMAME
 var edamame = bodymovin.loadAnimation({

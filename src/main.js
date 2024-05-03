@@ -80,10 +80,7 @@ if (document.querySelector('.section_home-intro')) {
         loader();
     });
 
-    const loaderBtnFalse = document.querySelector('[play-sound="false"]').addEventListener('click', function () {
-        playSound = false;
-        loader();
-    });
+   
 }
 
 

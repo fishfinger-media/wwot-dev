@@ -541,22 +541,18 @@ let newsSwiper = new Swiper('.swiper.is-news', {
         nextEl: '.swiper_nav.is-next',
         prevEl: '.swiper_nav.is-prev',
     },
-
     
-    breakpoints: {
-        992: {
-            slidesPerView: 5.2,
+    992: {
+        slidesPerView: 5.2,
+    },
+    991: {
+        slidesPerView: 3,
+        autoplay: {
+            delay: 5000,
         },
-        991: {
-            slidesPerView: 3,
-            autoplay: {
-                delay: 5000,
-            },
-        },
-        768 : {
-            slidesPerView: 1,
-        },
-        }
+    },
+    768 : {
+        slidesPerView: 2,
     },
 });
 

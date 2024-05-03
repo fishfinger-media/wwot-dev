@@ -1031,6 +1031,7 @@ animateBoatAlt();
 
 
 // EDEMAME
+if (document.querySelector('.home-hero_sushi-edamame')) {
 var edamame = bodymovin.loadAnimation({
     container: document.querySelector('.home-hero_sushi-edamame'),
     renderer: 'svg', // Change to 'canvas' if needed
@@ -1061,6 +1062,7 @@ element.addEventListener('click', function() {
     }
 });
 
-console.log('Hello, World! ')
+}
 
+console.log('Hello, World! ')
 

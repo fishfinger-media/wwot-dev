@@ -1025,4 +1025,3 @@ element.addEventListener('click', function() {
     }
 });
 
-console.log(hello)

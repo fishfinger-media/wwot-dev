@@ -530,7 +530,7 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
     loop: true,
-    
+    slidesPerView: 4,
     spaceBetween: 20,
 
     navigation: {
@@ -538,20 +538,7 @@ let newsSwiper = new Swiper('.swiper.is-news', {
         prevEl: '.swiper_nav.is-prev',
     },
     
-    992: {
-
-    slidesOffsetBefore: 80,
-        slidesPerView: 5.2,
-    },
-    991: {
-        slidesPerView: 3,
-        autoplay: {
-            delay: 5000,
-        },
-    },
-    768 : {
-        slidesPerView: 1,
-    },
+    
 });
 
 // PRODUCT SWIPER

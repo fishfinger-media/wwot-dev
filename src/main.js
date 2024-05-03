@@ -1022,6 +1022,8 @@ if (window.matchMedia("(max-width: 991px)").matches) {
     navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
     navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
     navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
+
+    console.log('nav aniamtion')
 }
 
 

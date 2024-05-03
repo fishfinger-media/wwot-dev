@@ -539,20 +539,22 @@ let newsSwiper = new Swiper('.swiper.is-news', {
         prevEl: '.swiper_nav.is-prev',
     },
     
-    992: {
+    breakpoints: {
+        992: {
 
-    slidesOffsetBefore: 80,
-        slidesPerView: 5.2,
-    },
-    991: {
-        slidesPerView: 3,
-        autoplay: {
-            delay: 5000,
-        },
-    },
-    768 : {
-        slidesPerView: 1,
-    },
+            slidesOffsetBefore: 80,
+                slidesPerView: 5.2,
+            },
+            991: {
+                slidesPerView: 3,
+                autoplay: {
+                    delay: 5000,
+                },
+            },
+            768 : {
+                slidesPerView: 1,
+            },
+    }
 });
 
 // PRODUCT SWIPER

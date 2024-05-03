@@ -487,8 +487,8 @@ if (document.querySelector('.swiper.is-team')) {
         spaceBetween: 50,
 
         navigation: {
-            nextEl: '.swiper_nav.is-next',
-            prevEl: '.swiper_nav.is-prev',
+            nextEl: '.swiper-mobile_nav.is-right',
+            prevEl: '.swiper-mobile_nav.is-left',
         },
 
         breakpoints: {
@@ -1095,7 +1095,7 @@ if (document.querySelector('.music_control')) {
     gsap.to('.music_control',{
         y: '0vh',
         duration: 1,
-        ease: "back.out(3)",
+        ease: "back.out(1)",
         scrollTrigger: {
             trigger: '.music_control',
             start: "top 80%",

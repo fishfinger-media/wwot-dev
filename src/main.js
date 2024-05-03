@@ -1100,21 +1100,3 @@ if (document.querySelector('.music_control')) {
     })
 }
 
-// CLUB BANNER
-if (window.innerWidth >= 479) {
-if (document.querySelector('.club_banner')) {
-    
-    let clubBanner = new Swiper('.club_banner', {
-        wrapperClass: 'club-banner_content',
-        slideClass: 'banner_image',
-        loop: true,
-        slidesPerView: 1,
-        speed: 400,
-        autoplay: {
-            delay: 800,
-        },
-       
-    });
-
-}
-}

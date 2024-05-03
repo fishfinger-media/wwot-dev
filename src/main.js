@@ -1087,4 +1087,19 @@ if (window.innerWidth >= 992) {
     gsap.from('.nav_bg',{ opacity:0})
 }
 
-  
+// MUSIC CONTROL VIEW
+
+if (document.querySelector('.music_control')) {
+    // by deafult music control is down 20vh when the user has scrolled 100vh the music control shoudl go up 
+
+    gsap.to('.music_control',{
+        y: '0vh',
+        duration: 1,
+        ease: "back.out(3)",
+        scrollTrigger: {
+            trigger: '.music_control',
+            start: "top 80%",
+            
+        }
+    })
+}

@@ -911,7 +911,7 @@ productThree.forEach(productThree => {
         slideClass: 'ourproducts_img',
         loop: true,
         slidesPerView: 1,
-        speed: 800,
+        speed: 400,
     });
 }
 
@@ -925,7 +925,7 @@ if (window.matchMedia("(max-width: 991px)").matches) {
             slideClass: 'swiper_slide',
             loop: true,
             slidesPerView: 1,
-            speed: 800,
+            speed: 400,
             autoplay: {
                 delay: 5000,
 

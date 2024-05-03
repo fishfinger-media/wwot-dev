@@ -3,13 +3,14 @@ import './styles/style.css'
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from 'gsap/all';
 import bodymovin from 'lottie-web';
 import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
 
-gsap.registerPlugin(ScrollTrigger, Draggable, );
+gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin );
 
 // LENIS
 const lenis = new Lenis()

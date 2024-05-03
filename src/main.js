@@ -502,6 +502,9 @@ if (document.querySelector('.swiper.is-team')) {
             991: {
                 slidesPerView: 1,
                 slidesPerGroup: 1,
+                autoplay: {
+                    delay: 5000,
+                },
             },
         },
 
@@ -537,6 +540,23 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     navigation: {
         nextEl: '.swiper_nav.is-next',
         prevEl: '.swiper_nav.is-prev',
+    },
+
+    
+    breakpoints: {
+        992: {
+            slidesPerView: 5.2,
+        },
+        991: {
+            slidesPerView: 3,
+            autoplay: {
+                delay: 5000,
+            },
+        },
+        768 : {
+            slidesPerView: 1,
+        },
+        }
     },
 });
 
@@ -1045,3 +1065,5 @@ element.addEventListener('click', function() {
 });
 
 console.log('Hello, World! ')
+
+

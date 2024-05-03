@@ -1100,3 +1100,34 @@ if (document.querySelector('.music_control')) {
     })
 }
 
+let mobileHeroInner = new Swiper('.swiper.is-mobile-hero_inner', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper_slide',
+    loop: false,
+    centeredSlides: true,
+    slidesPerView: 1,
+    initialSlide: 1,
+    speed: 400,
+    navigation:{
+        nextEl: '.ourproducts-inner_nav.is-right',
+        prevEl: '.ourproducts-inner_nav.is-left',
+    }
+}); 
+
+let mobileHero = new Swiper('.swiper.is-home-hero_mobile', {
+    wrapperClass: 'swiper_wrapper',
+    slideClass: 'swiper-slide',
+    loop: true,
+    allowTouchMove: false,
+    slidesPerView: 1,
+    speed: 400,
+    
+});
+
+
+document.querySelectorAll('[mobilegoto]').forEach(button => {
+    button.addEventListener('click', function () {
+        let slideIndex = parseInt(this.getAttribute('mobilegoto'));
+        mobileHero.slideTo(slideIndex - 1, 0);
+    });
+});

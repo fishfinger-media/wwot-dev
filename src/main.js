@@ -930,6 +930,11 @@ productThree.forEach(productThree => {
         loop: true,
         slidesPerView: 1,
         speed: 400,
+
+        navigation :{
+            nextEl: '.ourProducts-inner_nav.is-right',
+            prevEl: '.ourProducts-inner_nav.is-left',
+        }
     });
 }
 
@@ -1064,5 +1069,33 @@ element.addEventListener('click', function() {
 
 }
 
-console.log('Hello, World! ')
+// NAVIGATION
+if (window.innerWidth >= 992) {
+    let navSize = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.navigation',
+            start: "bottom top",
+            toggleActions: "play none none reverse"
+        }
+    })
 
+    navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
+    navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
+    navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
+
+} else {
+    gsap.to('.navigation', {
+        background: 'rgba(245, 254, 255, 0.2)',
+        backdropFilter: 'blur(5px)',
+        duration: 1,
+        ease: "power4.inOut",
+        scrollTrigger:{
+            trigger: '.navigation',
+            start: "bottom top",
+            toggleActions: "play none none reverse"
+        }
+
+    })
+}
+
+  

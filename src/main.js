@@ -520,7 +520,7 @@ if (document.querySelector('.swiper.is-team')) {
 }
 
 // NEWS SLIDER
-let newsSwiper = new Swiper('.swiper .is-news', {
+let newsSwiper = new Swiper('.swiper.is-news', {
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
     loop: true,

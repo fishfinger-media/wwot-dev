@@ -535,7 +535,6 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     loop: true,
     
     spaceBetween: 20,
-    slidesOffsetBefore: 80,
 
     navigation: {
         nextEl: '.swiper_nav.is-next',
@@ -543,6 +542,8 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     },
     
     992: {
+
+    slidesOffsetBefore: 80,
         slidesPerView: 5.2,
     },
     991: {

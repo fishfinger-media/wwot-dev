@@ -1032,9 +1032,6 @@ function animateBoatAlt() {
 }
 animateBoatAlt();
 
-
-
-
 // EDEMAME
 if (document.querySelector('.home-hero_sushi-edamame')) {
 var edamame = bodymovin.loadAnimation({
@@ -1088,7 +1085,6 @@ if (window.innerWidth >= 992) {
 }
 
 // MUSIC CONTROL VIEW
-
 if (document.querySelector('.music_control')) {
     // by deafult music control is down 20vh when the user has scrolled 100vh the music control shoudl go up 
 
@@ -1102,4 +1098,23 @@ if (document.querySelector('.music_control')) {
             
         }
     })
+}
+
+// CLUB BANNER
+if (window.innerWidth >= 479) {
+if (document.querySelector('.club_banner')) {
+    
+    let clubBanner = new Swiper('.club_banner', {
+        wrapperClass: 'club-banner_content',
+        slideClass: 'banner_image',
+        loop: true,
+        slidesPerView: 1,
+        speed: 400,
+        autoplay: {
+            delay: 800,
+        },
+       
+    });
+
+}
 }

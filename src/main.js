@@ -1083,19 +1083,6 @@ if (window.innerWidth >= 992) {
     navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
     navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
 
-} else {
-    gsap.to('.navigation', {
-        background: 'rgba(245, 254, 255, 0.2)',
-        backdropFilter: 'blur(5px)',
-        duration: 1,
-        ease: "power4.inOut",
-        scrollTrigger:{
-            trigger: '.navigation',
-            start: "bottom top",
-            toggleActions: "play none none reverse"
-        }
-
-    })
-}
+} 
 
   

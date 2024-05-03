@@ -1,5 +1,8 @@
 import './styles/style.css'
 
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
 import bodymovin from 'lottie-web';
 import Lenis from 'lenis';
 import SplitType from 'split-type';

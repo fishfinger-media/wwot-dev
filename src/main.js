@@ -240,28 +240,29 @@ splitParagraphs.forEach(splitParagraphs => {
 });
 
 // WELCOME POLAROIDS
-if (document.querySelector('.section_home-welcome')) {
+if (window.matchMedia("(max-width: 991px)").matches) {
+    if (document.querySelector('.section_home-welcome')) {
 
-    let welcomeImg = document.querySelectorAll('.welcome_polaroid');
+        let welcomeImg = document.querySelectorAll('.welcome_polaroid');
 
-    welcomeImg.forEach(welcomeImg => {
-        gsap.from(welcomeImg, {
-            top: "25%",
-            left: "25%",
-            bottom: "25%",
-            right: "25%",
-            scale: 0,
-            duration: 1,
-            ease: "back",
-            scrollTrigger: {
-                trigger: '.welcome_polaroid',
-                start: "top 80%",
-            }
+        welcomeImg.forEach(welcomeImg => {
+            gsap.from(welcomeImg, {
+                top: "25%",
+                left: "25%",
+                bottom: "25%",
+                right: "25%",
+                scale: 0,
+                duration: 1,
+                ease: "back",
+                scrollTrigger: {
+                    trigger: '.welcome_polaroid',
+                    start: "top 80%",
+                }
+            });
         });
-    });
 
+    }
 }
-
 // QUIZ
 if (document.querySelector('.section_quiz')) {
 

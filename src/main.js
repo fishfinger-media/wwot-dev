@@ -530,7 +530,7 @@ let newsSwiper = new Swiper('.swiper.is-news', {
     wrapperClass: 'swiper_wrapper',
     slideClass: 'swiper_slide',
     loop: true,
-    slidesPerView: 'auto'
+    slidesPerView: 'auto',
     spaceBetween: 20,
 
     navigation: {

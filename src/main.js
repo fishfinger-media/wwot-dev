@@ -26,6 +26,7 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
+
 if (document.querySelector('.section_home-intro')) {
 
     var animation = bodymovin.loadAnimation({
@@ -81,6 +82,8 @@ if (document.querySelector('.section_home-intro')) {
         loader();
     });
 }
+
+
 
 // DOG BARKS 
 const dogBarks = document.querySelectorAll('[dog-bark]');
@@ -558,9 +561,29 @@ if (document.querySelector('.swiper.is-product')) {
             },
         },
 
+        on: {
+            slideChange: function () {
+                // Get current active slide
+                let activeSlide = this.slides[this.activeIndex];
+
+                // Get image source and background color from current active slide
+                let imageUrl = activeSlide.getAttribute('data-image-src');
+                let containerColor = activeSlide.getAttribute('data-container-color');
+
+                // Change image source
+                document.querySelector('.ourproducts_hills').setAttribute('src', imageUrl);
+                // Change background color
+                document.querySelector('.ourproducts_container').style.backgroundColor = containerColor;
+            }
+        }
     });
 }
 
+
+// PRODUCT INNER SWIPER
+if (window.matchMedia("(min-width: 991px)").matches) {
+
+    gsap.set('.ourproducts_label',{yPercent: -50, scale:0});
 
 let productOne = document.querySelectorAll('.ourproducts_img.is-1');
 let productTwo = document.querySelectorAll('.ourproducts_img.is-2');
@@ -588,7 +611,8 @@ productOne.forEach(productOne => {
             });
             gsap.to(productOne, {
                 scale: 1.3,
-                marginLeft: '-10%',
+                zIndex: "3",
+                marginLeft: '-20%',
                 duration: 0.8,
                 ease: "power4.inOut",
                 
@@ -596,6 +620,7 @@ productOne.forEach(productOne => {
             })
             gsap.to(productTwo, {
                 scale: 0.8,
+                zIndex: "2",
                 marginLeft: '-10%',
                 duration: 0.8,
                 ease: "power4.inOut",
@@ -603,8 +628,9 @@ productOne.forEach(productOne => {
 
             })
             gsap.to(productThree, {
-                scale: 0.8,
-                marginLeft: '-10%',
+                scale: 0.6,
+                zIndex: "1",
+                marginLeft: '-20%',
                 duration: 0.8,
                 ease: "power4.inOut",
             
@@ -620,6 +646,13 @@ productOne.forEach(productOne => {
             })
     
             isClicked = true;
+
+            productTwo.forEach(productTwo => {
+                productTwo.style.pointerEvents = 'none';
+            });
+            productThree.forEach(productThree => {
+                productThree.style.pointerEvents = 'none';
+            });
         } else {
 
             gsap.to('.ourproducts_tabs-container', {
@@ -654,6 +687,13 @@ productOne.forEach(productOne => {
             })
     
             isClicked = false;
+            productTwo.forEach(productTwo => {
+                productTwo.style.pointerEvents = 'auto';
+            });
+            productThree.forEach(productThree => {
+                productThree.style.pointerEvents = 'auto';
+            });
+
         }
 
     });
@@ -667,24 +707,28 @@ productTwo.forEach(productTwo => {
 
             gsap.to('.ourproducts_tabs-container', {
                 width: '80%',
+              
                 marginLeft: '-10%',
                 duration: 0.8,
                 ease: "power4.inOut"
             });
             gsap.to(productOne, {
                 scale: 0.8,
+                zIndex: "2",
                 marginRight: '-10%',
     
                 duration: 0.8,
                 ease: "power4.inOut"
             })
             gsap.to(productThree, {
+                zIndex: "1",
                 scale: 0.8,
                 marginLeft: '-10%',
                 duration: 0.8,
                 ease: "power4.inOut"
             })
             gsap.to(productTwo, {
+                zIndex: "3",
                 scale: 1.3,
                 duration: 0.8,
                 ease: "power4.inOut"
@@ -696,6 +740,16 @@ productTwo.forEach(productTwo => {
             })
     
             isClicked = true;
+            
+
+            productOne.forEach(productOne => {
+                productOne.style.pointerEvents = 'none';
+            });
+            productThree.forEach(productThree => {
+                productThree.style.pointerEvents = 'none';
+            });
+
+
         } else {
 
             gsap.to('.ourproducts_tabs-container', {
@@ -729,6 +783,13 @@ productTwo.forEach(productTwo => {
             })
     
             isClicked = false;
+            productOne.forEach(productOne => {
+                productOne.style.pointerEvents = 'auto';
+            });
+            productThree.forEach(productThree => {
+                productThree.style.pointerEvents = 'auto';
+            });
+
         }
 
     });
@@ -748,7 +809,8 @@ productThree.forEach(productThree => {
             });
 
             gsap.to(productOne, {
-                scale: 0.8,
+                scale: 0.6,
+                zIndex: "1",
                 marginLeft: '-30%',
                 duration: 0.8,
                 ease: "power4.inOut"
@@ -756,6 +818,7 @@ productThree.forEach(productThree => {
             
             gsap.to(productTwo, {
                 scale: 0.8,
+                zIndex: "2",
                 marginLeft: '-20%',
                 duration: 0.8,
                 ease: "power4.inOut"
@@ -763,6 +826,7 @@ productThree.forEach(productThree => {
 
             gsap.to(productThree, {
                 scale: 1.3,
+                zIndex: "3",
                 marginLeft: '-10%',
                 duration: 0.8,
                 ease: "power4.inOut"
@@ -775,6 +839,13 @@ productThree.forEach(productThree => {
             })
         
             isClicked = true;
+            productOne.forEach(productOne => {
+                productOne.style.pointerEvents = 'none';
+            });
+            productTwo.forEach(productTwo => {
+                productTwo.style.pointerEvents = 'none';
+            });
+
         }
     
         else {
@@ -814,6 +885,13 @@ productThree.forEach(productThree => {
             })
 
             isClicked = false;
+            productOne.forEach(productOne => {
+                productOne.style.pointerEvents = 'auto';
+            });
+            productTwo.forEach(productTwo => {
+                productTwo.style.pointerEvents = 'auto';
+            });
+
         }
     }
     )
@@ -821,10 +899,17 @@ productThree.forEach(productThree => {
 
 );
 
+} else {
+    // INNER SWIPER
 
-
-
-
+    let innerProductSwiper = new Swiper('.swiper .is-inner-product', {
+        wrapperClass: 'ourproducts_tabs-container',
+        slideClass: 'ourproducts_img',
+        loop: true,
+        slidesPerView: 1,
+        speed: 800,
+    });
+}
 
 
 // MUSIC CONTROL
@@ -908,3 +993,34 @@ let navSize = gsap.timeline({
 navSize.to('.nav_logo',{ height: '3.5rem', duration: 1, ease: "power4.inOut",})
 navSize.to('.nav_content', { paddingTop: '2rem', paddingBottom: '2rem', duration: 1, ease: "power4.inOut" }, "-=1")
 navSize.to('.navigation', { background: 'rgba(245, 254, 255, 0.2)', backdropFilter: 'blur(5px)', duration: 1, ease: "power4.inOut" }, "-=1")
+
+// EDEMAME
+var edamame = bodymovin.loadAnimation({
+    container: document.querySelector('.home-hero_sushi-edamame'),
+    renderer: 'svg', // Change to 'canvas' if needed
+    loop: false,
+    autoplay: false,
+    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66323ca588db562548f481f4_edeme.json'
+});
+
+var clickCount = 0;
+var element = document.querySelector('.home-hero_sushi-edamame');
+element.addEventListener('click', function() {
+    clickCount++;
+
+    if (clickCount === 1) {
+        // Play frames 1 - 30
+        edamame.playSegments([0, 30], true);
+    } else if (clickCount === 2) {
+        // Play frames 31 - 57
+        edamame.playSegments([30, 57], true);
+    } else if (clickCount === 3) {
+        // Play frames 58 - 86
+        edamame.playSegments([57, 86], true);
+    } else if (clickCount === 4) {
+        // Play frames 87 - 100
+        edamame.playSegments([86, 100], true);
+        // Reset click count
+        clickCount = 0;
+    }
+});

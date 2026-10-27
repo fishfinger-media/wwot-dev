@@ -8,6 +8,12 @@ import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
+import { initNewHero, hasNewHero } from './hero/main.js';
+import { createMusic } from './hero/audio.js';
+
+// New homepage hero (src/hero). While it is on the page the legacy hero code below stays idle.
+const NEW_HERO = hasNewHero();
+initNewHero();
 
 
 gsap.registerPlugin(ScrollTrigger,Draggable,);
@@ -26,7 +32,7 @@ let playSound = true;
 let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
 
 // LOADER
-if (document.querySelector('.section_home-intro')) {
+if (!NEW_HERO && document.querySelector('.section_home-intro')) {
 
     var animation = bodymovin.loadAnimation({
         container: document.querySelector('.home-intro_lottie-container'),
@@ -87,7 +93,7 @@ if (document.querySelector('.section_home-intro')) {
 
 
 // DOG BARKS 
-const dogBarks = document.querySelectorAll('[dog-bark]');
+const dogBarks = NEW_HERO ? [] : document.querySelectorAll('[dog-bark]');
 
 dogBarks.forEach(dogBark => {
     dogBark.addEventListener('click', function () {
@@ -969,11 +975,13 @@ if (document.querySelector('.music_control')) {
     const audioIcon = document.getElementById('audio-icon');
 
     musicControl.addEventListener('click', function () {
-        if (music.paused) {
-            music.play();
+        // the new hero only creates its audio after Enter, so create it here if needed
+        const track = NEW_HERO ? createMusic() : music;
+        if (track.paused) {
+            track.play();
             audioIcon.src = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f68e8cce0ba76b5e15_icon_vol-off.svg';
         } else {
-            music.pause();
+            track.pause();
             audioIcon.src = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f66fa8b47bafdf14a7_icon_vol-on.svg';
         }
     });

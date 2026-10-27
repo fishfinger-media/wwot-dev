@@ -1,0 +1,4 @@
+# Hero assets are loaded cross-origin by wonderfulworldoftreats.co.uk
+/hero/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

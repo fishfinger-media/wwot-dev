@@ -112,24 +112,26 @@ const pick = (start, end) => {
   if (a < 0 || b < 0) throw new Error('marker not found: ' + start);
   return html.slice(a, b);
 };
-let body = [
-  pick('<svg class="sprite"', '<!-- ===================== NAV'),
-  pick('<section class="section_home-hero', '<!-- ===================== MOBILE HERO'),
-  pick('<section class="section_mobile-home', '<!-- Filler') ,
-  pick('<!-- ===================== POPUPS', '<!-- ===================== INTRO'),
-  pick('<!-- ===================== INTRO', '<script type="module"'),
-].join('\n');
-body = body
+const clean = (s, base = BASE) => s
   .replace(/<!--[\s\S]*?-->/g, '')
   .replace(/class="([^"]*)"/g, (_, v) => `class="${preClassAttr(v)}"`)
-  .replace(/(src|href|srcset|imagesrcset|poster|data-src)="([^"]*)"/g, (_, a, v) => `${a}="${v.replace(/(^|[\s,])\/assets\//g, `$1${BASE}/assets/`)}"`)
+  .replace(/(src|href|srcset|imagesrcset|poster|data-src)="([^"]*)"/g, (_, a, v) => `${a}="${v.replace(/(^|[\s,])\/assets\//g, `$1${base}/assets/`)}"`)
   .replace(/\n\s*\n+/g, '\n')
   .replace(/^\s+/gm, '');
-const embed = `<div class="wh-root">\n${body}</div>`;
+// Hero markup: bundled into main.js and injected into .wh-root (src/hero/main.js).
+const markup = clean([
+  pick('<svg class="sprite"', '<!-- ===================== NAV'),
+  pick('<section class="section_home-hero', '<!-- ===================== MOBILE HERO'),
+  pick('<section class="section_mobile-home', '<!-- Filler'),
+  pick('<!-- ===================== POPUPS', '<!-- ===================== INTRO'),
+].join('\n'), '__HERO_BASE__');
+write(path.join(DST, 'src/hero/markup.html'), markup);
+// Webflow embed: only the Enter screen, so the first paint does not wait for main.js.
+const embed = `<div class="wh-root">\n${clean(pick('<!-- ===================== INTRO', '<script type="module"'))}</div>`;
 write(path.join(DST, 'src/hero/embed.html'), embed);
 
 // head preloads for the Webflow page (first world's layers)
 const head = [...html.matchAll(/<link rel="preload" as="image"[^>]*>/g)].map((m) => m[0].replace(/\/assets\//g, BASE + '/assets/')).join('\n');
 write(path.join(DST, 'src/hero/head.html'), `<link rel="stylesheet" href="${BASE}/hero.css" />\n` + head + '\n');
 
-console.log('classes prefixed:', C.size, ' embed chars:', embed.length);
+console.log('classes prefixed:', C.size, ' markup chars:', markup.length, ' embed chars:', embed.length);

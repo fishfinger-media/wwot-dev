@@ -4,13 +4,25 @@
  * what goes in it (a looping <video>, an animated WebP, an inline SVG with CSS animation, or a static
  * frame) and only mounts assets for the active world + its neighbours, unmounting the rest so the
  * GPU never holds all four worlds' videos at once.
+ * Behaviour comes from motion-registry.js; asset URLs come from the slot's own data attributes,
+ * so slots sharing an id (the flocks) can each point at whatever Webflow serves.
  */
 import { MOTION } from './motion-registry.js';
-import { buildLogoWriteOn } from './logo-writeon.js';
+import { buildLogoWriteOn, preloadLogoWriteOn } from './logo-writeon.js';
 
 const mounted = new Map(); // slot -> { el, tl? }
 const NEIGHBOURS = { burger: ['sushi', 'cake'], cake: ['burger', 'pizza'], pizza: ['cake', 'sushi'], sushi: ['pizza', 'burger'] };
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Slot attributes that hold asset URLs (dataset names), merged over the registry entry.
+const URL_KEYS = ['mov', 'webm', 'webp', 'poster', 'src', 'logoSvg', 'timemap'];
+function defOf(slot) {
+  const base = MOTION[slot.dataset.motion];
+  if (!base) return null;
+  const def = { ...base };
+  URL_KEYS.forEach((k) => { if (slot.dataset[k]) def[k] = slot.dataset[k]; });
+  return def;
+}
 
 const probe = document.createElement('video');
 const canHevcAlpha = !!probe.canPlayType('video/mp4; codecs="hvc1"') && /Safari/.test(navigator.userAgent) && !/Chrome|Chromium|Edg/.test(navigator.userAgent);
@@ -32,7 +44,8 @@ function buildVideo(def) {
 }
 function buildStill(def) {
   const i = new Image();
-  i.src = reduced ? (def.poster || def.webp) : (def.webp || def.poster);
+  const url = reduced ? (def.poster || def.webp) : (def.webp || def.poster);
+  if (url) i.src = url;
   i.alt = ''; i.decoding = 'async';
   return i;
 }
@@ -40,8 +53,8 @@ function build(def, slot) {
   switch (def.type) {
     case 'video': return { el: buildVideo(def) };
     case 'webp': return { el: buildStill(def) };
-    case 'img': { const i = new Image(); i.src = def.src; i.alt = ''; i.decoding = 'async'; return { el: i }; }
-    case 'logo': return buildLogoWriteOn({ reduced });
+    case 'img': { if (!def.src) return null; const i = new Image(); i.src = def.src; i.alt = ''; i.decoding = 'async'; return { el: i }; }
+    case 'logo': return buildLogoWriteOn({ reduced, svg: def.logoSvg, map: def.timemap });
     case 'svg': { const w = document.createElement('div'); w.innerHTML = def.svg; return { el: w.firstElementChild }; }
     default: return null;
   }
@@ -49,7 +62,7 @@ function build(def, slot) {
 
 function mount(slot) {
   if (mounted.has(slot)) return;
-  const def = MOTION[slot.dataset.motion];
+  const def = defOf(slot);
   if (!def) return;
   const built = build(def, slot);
   if (!built?.el) return;
@@ -89,7 +102,7 @@ export function setActiveWorld(world) {
 /** Play a one-shot motion (e.g. intro logo). Returns its duration in seconds. */
 export function playMotion(id) {
   const slot = document.querySelector(`.wh-motion-slot[data-motion="${id}"]`);
-  const def = MOTION[id];
+  const def = slot && defOf(slot);
   if (!slot || !def) return 0;
   mount(slot);
   const m = mounted.get(slot);
@@ -112,6 +125,9 @@ function bindClickToPlay(slot) {
 }
 
 export function initMotion() {
+  // The intro logo's SVG and time map are fetched now so they are ready by the time "Enter" is clicked.
+  const logo = document.querySelector('.wh-motion-slot[data-motion="intro-logo"]');
+  if (logo) { const def = defOf(logo); preloadLogoWriteOn({ svg: def.logoSvg, map: def.timemap }); }
   document.querySelectorAll('.wh-motion-slot').forEach((slot) => { if (MOTION[slot.dataset.motion]?.trigger === 'click') bindClickToPlay(slot); });
   // Edamame: each click plays the next of four segments (as in the original Lottie).
   const edamame = document.querySelector('[data-motion="sushi-edamame"]');

@@ -3,16 +3,14 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
-import bodymovin from 'lottie-web';
 import Lenis from 'lenis';
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
 import { Navigation, Pagination } from 'swiper/modules';
-import { initNewHero, hasNewHero } from './hero/main.js';
+import { initNewHero } from './hero/main.js';
 import { createMusic } from './hero/audio.js';
 
-// New homepage hero (src/hero). While it is on the page the legacy hero code below stays idle.
-const NEW_HERO = hasNewHero();
+// Homepage hero (src/hero); does nothing on pages without it.
 initNewHero();
 
 
@@ -27,185 +25,6 @@ function raf(time) {
 }
 requestAnimationFrame(raf)
 
-
-let playSound = true;
-let music = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/intro.mp3');
-
-// LOADER
-if (!NEW_HERO && document.querySelector('.section_home-intro')) {
-
-    var animation = bodymovin.loadAnimation({
-        container: document.querySelector('.home-intro_lottie-container'),
-        renderer: 'svg',
-        loop: false,
-        autoplay: false,
-        path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66301265da26ca5dc373a497_logoMenu.json',
-    });
-
-    function loader() {
-        const slide1 = document.querySelector('.home_intro-slide.slide-1');
-        gsap.to(slide1, {
-            opacity: 0,
-            duration: 1,
-            onComplete: () => slide1.style.display = 'none'
-        });
-        animation.play();
-
-        gsap.to('.home_intro', {
-            yPercent: -100,
-            duration: 1.4,
-            ease: "power4.inOut",
-        }, "+4");
-
-        // Run navigation GSAP animations only on screens 991px and higher
-        if (window.innerWidth >= 992) {
-            gsap.from('.navigation', {
-                yPercent: -100,
-                duration: 1.4,
-                ease: "power4.inOut"
-            }, "-=1");
-        }
-
-        gsap.from('.home-hero_slide', {
-            yPercent: 30,
-            duration: 1.4,
-            ease: "power4.inOut",
-            stagger: 0.1
-        }, "-=2");
-        lenis.scrollTo(0, 0, 0);
-
-        if (playSound) {
-            music.loop = true;
-            music.volume = 0.6
-            music.play();
-        }
-    }
-
-    const loaderBtnTrue = document.querySelector('[play-sound="true"]').addEventListener('click', function () {
-        playSound = true;
-        loader();
-    });
-
-   
-}
-
-
-
-
-// DOG BARKS 
-const dogBarks = NEW_HERO ? [] : document.querySelectorAll('[dog-bark]');
-
-dogBarks.forEach(dogBark => {
-    dogBark.addEventListener('click', function () {
-        const audio = new Audio('https://cdn.jsdelivr.net/gh/fishfinger-media/wwot-dev/media/bark.mp3');
-        audio.play();
-
-        const speechBubble = dogBark.querySelector('.home-hero_speechbubble');
-
-        gsap.set(speechBubble, {
-            scale: 0,
-            opacity: 1
-        });
-
-        gsap.to(speechBubble, {
-            duration: 0.5,
-            scale: 1,
-            ease: "power2.out",
-            onComplete: function () {
-                gsap.set(speechBubble, {
-                    scale: 0,
-                    opacity: 1
-                }, "+=0.5");
-            }
-        });
-    });
-});
-
-// HERO SLIDER
-if (document.querySelector('.section_home-hero')) {
-
-    var homeSwiper = new Swiper(".section_home-hero", {
-        wrapperClass: "swiper_wrapper",
-        slideClass: "home-hero_slide",
-        speed: 800,
-        simulateTouch: false,
-        parallax: true,
-        loop: true,
-
-    });
-
-
-
-    let buttonsNext = document.querySelectorAll('.hero_slide-nav.is-next');
-    let buttonsPrev = document.querySelectorAll('.hero_slide-nav.is-prev');
-
-
-
-    buttonsNext.forEach(function (button) {
-        button.addEventListener('click', function () {
-            homeSwiper.slideNext();
-
-
-          
-        });
-    });
-
-
-            
-
-    buttonsPrev.forEach(function (button) {
-        button.addEventListener('click', function () {
-            homeSwiper.slidePrev();
-        })
-    });
-
-
-    document.querySelectorAll('[data-button]').forEach(button => {
-        button.addEventListener('click', function () {
-            let popup = document.querySelector(`[data-popup="${this.getAttribute('data-button')}"]`);
-            let popupImage = popup.querySelector('.home-popup_postcard-character');
-            let popupLetter = popup.querySelector('.home-popup_postcard');
-            popup.style.display = 'flex';
-            gsap.fromTo(popup, {
-                opacity: 0
-            }, {
-                opacity: 1,
-                duration: 0.5
-            });
-            gsap.from(popupImage, {
-                yPercent: -100,
-                duration: 1.5,
-                ease: "back"
-            });
-            gsap.from(popupLetter, {
-                yPercent: 100,
-                duration: 1.5,
-                ease: "back"
-            })
-
-        });
-    });
-
-
-    document.querySelectorAll('[data-popup]').forEach(popup => {
-        popup.addEventListener('click', function () {
-            let popupImage = popup.querySelector('.home-popup_postcard-character');
-            let popupLetter = popup.querySelector('.home-popup_postcard');
-
-            gsap.to(this, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: () => {
-                    this.style.display = 'none';
-                }
-            });
-
-        });
-    });
-
-
-
-};
 
 // SPLIT TEXT
 const splitWords = document.querySelectorAll('[data-heading]')
@@ -944,41 +763,20 @@ productThree.forEach(productThree => {
     });
 }
 
-// MOBILE HOME SLIDER
-
-if (window.matchMedia("(max-width: 991px)").matches) {
-    if (document.querySelector('.swiper.is-mobile-hero')) {
-
-        let mobileSwiper = new Swiper('.swiper.is-mobile-hero', {
-            wrapperClass: 'swiper_wrapper',
-            slideClass: 'swiper_slide',
-            loop: true,
-            slidesPerView: 1,
-            speed: 400,
-            autoplay: {
-                delay: 5000,
-
-            },
-            navigation:{
-                nextEl: '.swiper-mobile_nav.is-right',
-                prevEl: '.swiper-mobile_nav.is-left',
-            }
-        });
-
-    };
-}
 
 // MUSIC CONTROL
+// Drives the homepage hero's track (src/hero/audio.js); it is created on first use, so this
+// works whether or not the visitor clicked Enter. Pages without the hero have no track.
 if (document.querySelector('.music_control')) {
 
     const musicControl = document.querySelector('.music_control');
     const audioIcon = document.getElementById('audio-icon');
 
     musicControl.addEventListener('click', function () {
-        // the new hero only creates its audio after Enter, so create it here if needed
-        const track = NEW_HERO ? createMusic() : music;
+        const track = createMusic();
+        if (!track) return;
         if (track.paused) {
-            track.play();
+            track.play().catch(() => {});
             audioIcon.src = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f68e8cce0ba76b5e15_icon_vol-off.svg';
         } else {
             track.pause();
@@ -987,92 +785,6 @@ if (document.querySelector('.music_control')) {
     });
 }
 
-// BOAT 
-function animateBoat() {
-    gsap.timeline({
-            repeat: -1,
-            yoyo: true
-        })
-        .to("#boat", {
-            duration: 2,
-            y: -30,
-            ease: "power1.inOut"
-        })
-        .to("#boat", {
-            duration: 2,
-            y: -10,
-            ease: "power1.inOut"
-        });
-
-    gsap.to("#boat", {
-        duration: 4,
-        x: "-=20",
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-    });
-}
-animateBoat();
-
-function animateBoatAlt() {
-    gsap.timeline({
-            repeat: -1,
-            yoyo: true
-        })
-        .to("#boatAlt", {
-            duration: 2.5,
-            y: -20,
-            ease: "power1.inOut"
-        })
-        .to("#boatAlt", {
-            duration: 2.5,
-            y: -6,
-            ease: "power1.inOut"
-        });
-
-    gsap.to("#boatAlt", {
-        duration: 4,
-        x: "-=23",
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-    });
-}
-animateBoatAlt();
-
-// EDEMAME
-if (document.querySelector('.home-hero_sushi-edamame')) {
-var edamame = bodymovin.loadAnimation({
-    container: document.querySelector('.home-hero_sushi-edamame'),
-    renderer: 'svg', // Change to 'canvas' if needed
-    loop: false,
-    autoplay: false,
-    path: 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/66323ca588db562548f481f4_edeme.json'
-});
-
-var clickCount = 0;
-var element = document.querySelector('.home-hero_sushi-edamame');
-element.addEventListener('click', function() {
-    clickCount++;
-
-    if (clickCount === 1) {
-        // Play frames 1 - 30
-        edamame.playSegments([0, 30], true);
-    } else if (clickCount === 2) {
-        // Play frames 31 - 57
-        edamame.playSegments([30, 57], true);
-    } else if (clickCount === 3) {
-        // Play frames 58 - 86
-        edamame.playSegments([57, 86], true);
-    } else if (clickCount === 4) {
-        // Play frames 87 - 100
-        edamame.playSegments([86, 100], true);
-        // Reset click count
-        clickCount = 0;
-    }
-});
-
-}
 
 // NAVIGATION
 if (window.innerWidth >= 992) {
@@ -1108,34 +820,3 @@ if (document.querySelector('.music_control')) {
     })
 }
 
-let mobileHeroInner = new Swiper('.swiper.is-mobile-hero_inner', {
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper_slide',
-    loop: false,
-    centeredSlides: true,
-    slidesPerView: 1,
-    initialSlide: 1,
-    speed: 400,
-    navigation:{
-        nextEl: '.ourproducts-inner_nav.is-right',
-        prevEl: '.ourproducts-inner_nav.is-left',
-    }
-}); 
-
-let mobileHero = new Swiper('.swiper.is-home-hero_mobile', {
-    wrapperClass: 'swiper_wrapper',
-    slideClass: 'swiper-slide',
-    loop: true,
-    allowTouchMove: false,
-    slidesPerView: 1,
-    speed: 400,
-    
-});
-
-
-document.querySelectorAll('[mobilegoto]').forEach(button => {
-    button.addEventListener('click', function () {
-        let slideIndex = parseInt(this.getAttribute('mobilegoto'));
-        mobileHero.slideTo(slideIndex - 1, 0);
-    });
-});

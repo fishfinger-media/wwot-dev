@@ -1,8 +1,5 @@
-// New homepage hero, ported from the standalone rebuild by tools/port-hero.mjs; styles are public/hero/hero.css.
-// Runs only when the hero embed (.wh-root) is on the page. The Webflow embed holds just the Enter
-// screen (src/hero/embed.html); the rest of the hero markup ships in this bundle and is injected here.
-import markup from './markup.html?raw';
-import { HERO_BASE } from './base.js';
+// New homepage hero. Markup, styles and assets all live in Webflow (every class is `wh-` prefixed);
+// this module only wires up behaviour, and runs only when the hero root (.wh-root) is on the page.
 import { initClouds } from './clouds.js';
 import { initIntro } from './intro.js';
 import { initHero } from './hero.js';
@@ -11,17 +8,34 @@ import { initPopups } from './popups.js';
 import { initMotion, setMotionScope } from './motion.js';
 import { initBarks } from './barks.js';
 
-export const hasNewHero = () => !!document.querySelector('.wh-root');
+/**
+ * Webflow's builder turns <button>s into links, so every control is <a href="#" role="button">.
+ * Stop those links jumping to the top of the page, and let Space activate them like a button
+ * (Enter already fires click on links).
+ */
+function initLinkButtons(root) {
+  // Capture phase so a handler calling stopPropagation (e.g. barks) can't let the jump through.
+  root.addEventListener('click', (e) => {
+    if (e.target.closest('a[href="#"]')) e.preventDefault();
+  }, true);
+  root.addEventListener('keydown', (e) => {
+    if (e.key !== ' ' && e.key !== 'Spacebar') return;
+    const btn = e.target.closest?.('a[role="button"]');
+    if (!btn) return;
+    e.preventDefault(); // no page scroll
+    btn.click();
+  });
+}
 
 export function initNewHero() {
-  if (!hasNewHero()) return;
   const root = document.querySelector('.wh-root');
-  if (!document.getElementById('home-hero')) root.insertAdjacentHTML('afterbegin', markup.replaceAll('__HERO_BASE__', HERO_BASE));
+  if (!root) return;
   const isDesktop = window.matchMedia('(min-width: 992px)').matches;
 
   document.body.dataset.product = 'burger';
   if (document.getElementById('home-intro')) document.body.classList.add('wh-no-scroll');
 
+  initLinkButtons(root);
   initClouds();
   initPopups();
   initBarks();

@@ -1,33 +1,14 @@
 /**
  * Clouds.
  * The Webflow page inlined ~50 cloud SVGs (2.7 MB of HTML) that were only 3 shapes.
- * Here each shape lives once in a <symbol>; every cloud is a <use> coloured by CSS.
+ * Here each shape lives once in a <symbol id="cloud-1|2|3"> (a Webflow embed on the page);
+ * every cloud is a <use> coloured by CSS.
  * Cloud tracks are described in markup as data-clouds="shape:fill:widthRem,..."
  * and duplicated once so the marquee loops without a seam.
  */
-import cloud1 from '../../public/hero/assets/clouds/cloud-1.svg?raw';
-import cloud2 from '../../public/hero/assets/clouds/cloud-2.svg?raw';
-import cloud3 from '../../public/hero/assets/clouds/cloud-3.svg?raw';
-
 const RATIO = { 1: 204 / 491, 2: 78 / 182, 3: 59 / 140 };
 
-function pathsOf(svg) {
-  // keep only the inner content (paths); strip the outer <svg> and any fill so CSS owns colour
-  return svg
-    .replace(/^[\s\S]*?<svg[^>]*>/, '')
-    .replace(/<\/svg>\s*$/, '')
-    .replace(/\sfill="[^"]*"/g, '');
-}
-
 export function initClouds() {
-  const sym = (id, src) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = pathsOf(src);
-  };
-  sym('cloud-1', cloud1);
-  sym('cloud-2', cloud2);
-  sym('cloud-3', cloud3);
-
   document.querySelectorAll('.wh-cloud-track[data-clouds]').forEach((track) => {
     const spec = track.dataset.clouds.split(',').map((s) => s.trim()).filter(Boolean);
     const html = spec

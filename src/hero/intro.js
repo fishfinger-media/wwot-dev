@@ -20,7 +20,7 @@ export function initIntro({ onEnter } = {}) {
   const enter = (withSound) => {
     if (started) return;
     started = true;
-    if (withSound) createMusic().play();
+    if (withSound) createMusic()?.play().catch(() => {}); // no track on the page, or autoplay refused
 
     const tl = gsap.timeline({ onComplete: () => { intro.classList.add('wh-is-done'); } });
     tl.to(slide1, { opacity: 0, duration: 0.6, onComplete: () => (slide1.style.display = 'none') });

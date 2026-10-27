@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 
 export function initPopups() {
   const popups = [...document.querySelectorAll('[data-popup]')];
+  // Webflow may drop the `hidden` attribute from the markup, so start every popup closed here.
+  popups.forEach((popup) => { popup.hidden = true; });
   let lastTrigger = null;
 
   const close = (popup) => {
@@ -26,7 +28,8 @@ export function initPopups() {
 
   popups.forEach((popup) => {
     popup.addEventListener('click', (e) => {
-      if (e.target.closest('a')) return; // let the postcard link through
+      // Let the postcard link through; the close control is an a[role="button"] and should close.
+      if (e.target.closest('a:not([role="button"])')) return;
       close(popup);
     });
   });

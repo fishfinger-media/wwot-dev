@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { playBark } from './audio.js';
 
 export function initBarks() {
-  document.querySelectorAll('[dog-bark]').forEach((el) => {
+  document.querySelectorAll('[data-bark]').forEach((el) => {
     const bubble = el.querySelector('.wh-home-hero_speechbubble');
     el.addEventListener('click', (e) => {
       e.stopPropagation();

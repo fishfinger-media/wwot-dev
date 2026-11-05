@@ -8,21 +8,26 @@ import { gsap } from 'gsap';
 import { createMusic } from './audio.js';
 import { playMotion } from './motion.js';
 
-export function initIntro({ onEnter } = {}) {
+export function initIntro({ onEnter, skip = false } = {}) {
   const intro = document.getElementById('home-intro');
-  if (!intro) return;
+  if (!intro) return null;
+  if (skip) { // Arrived from another page on the site: the intro only plays on a full page load.
+    intro.classList.add('wh-is-done');
+    return null;
+  }
   const slide1 = intro.querySelector('.wh-slide-1');
   const enterBtn = document.getElementById('enter-btn');
   const quietBtn = document.getElementById('enter-quiet');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let started = false;
+  let tl;
   const enter = (withSound) => {
     if (started) return;
     started = true;
     if (withSound) createMusic()?.play().catch(() => {}); // no track on the page, or autoplay refused
 
-    const tl = gsap.timeline({ onComplete: () => { intro.classList.add('wh-is-done'); } });
+    tl = gsap.timeline({ onComplete: () => { intro.classList.add('wh-is-done'); } });
     tl.to(slide1, { opacity: 0, duration: 0.6, onComplete: () => (slide1.style.display = 'none') });
 
     const logoDuration = playMotion('intro-logo'); // returns seconds, 0 if nothing to play
@@ -42,4 +47,6 @@ export function initIntro({ onEnter } = {}) {
     started = true;
     onEnter?.();
   }
+
+  return () => tl?.kill();
 }

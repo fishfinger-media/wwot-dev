@@ -40,6 +40,7 @@ export function initHero() {
   const startWorld = new URLSearchParams(location.search).get('world'); // dev: /?world=cake
   let current = Math.max(0, WORLDS.indexOf(startWorld));
   let busy = false;
+  let wipe = null; // the running world change, if any
   slides[current].classList.add('wh-is-active');
   root.style.backgroundColor = SKY[WORLDS[current]];
   setVisible(current); setActiveWorld(WORLDS[current]);
@@ -77,7 +78,7 @@ export function initHero() {
     const inStart = dir === 1 ? { '--wl': '116%', '--wr': '116%' } : { '--wl': '-16%', '--wr': '-16%' };
     const outSky = outgoing.querySelectorAll('.wh-sky'), inSky = incoming.querySelectorAll('.wh-sky'); // sushi has none
 
-    gsap.timeline({ onComplete: land })
+    wipe = gsap.timeline({ onComplete: land })
       .fromTo(outgoing, SHOWN, { ...outEdge, duration: OUT, ease: 'power1.inOut' }, 0)
       // Sky colour: mostly the old world's while it leaves, mostly the new one's as it arrives.
       .to(root, { backgroundColor: SKY[WORLDS[to]], duration: GAP + IN * 0.5, ease: 'sine.inOut' }, 0)
@@ -129,6 +130,7 @@ export function initHero() {
   root.addEventListener('worldchange', () => idle(warm, 300));
 
   return {
+    destroy: () => wipe?.kill(), // so a wipe in progress can't land on a page that has gone
     next: () => go(1),
     prev: () => go(-1),
     /** Original entrance: slides rise in with a stagger, nav drops in. */

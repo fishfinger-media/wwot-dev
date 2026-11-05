@@ -33,7 +33,9 @@ export function initPopups() {
       close(popup);
     });
   });
-  document.addEventListener('keydown', (e) => {
+  const onKeydown = (e) => {
     if (e.key === 'Escape') popups.filter((p) => !p.hidden).forEach(close);
-  });
+  };
+  document.addEventListener('keydown', onKeydown);
+  return () => document.removeEventListener('keydown', onKeydown);
 }

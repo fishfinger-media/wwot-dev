@@ -99,6 +99,12 @@ export function setActiveWorld(world) {
   });
 }
 
+/** Release every mounted asset (decoders especially) when the page goes away. */
+export function destroyMotion() {
+  [...mounted.keys()].forEach(unmount);
+  scope = document;
+}
+
 /** Play a one-shot motion (e.g. intro logo). Returns its duration in seconds. */
 export function playMotion(id) {
   const slot = document.querySelector(`.wh-motion-slot[data-motion="${id}"]`);

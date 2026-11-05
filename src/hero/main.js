@@ -5,8 +5,9 @@ import { initIntro } from './intro.js';
 import { initHero } from './hero.js';
 import { initMobileHero } from './mobile-hero.js';
 import { initPopups } from './popups.js';
-import { initMotion, setMotionScope } from './motion.js';
+import { initMotion, destroyMotion, setMotionScope } from './motion.js';
 import { initBarks } from './barks.js';
+import { pauseMusic, resumeMusic } from './audio.js';
 
 /**
  * Webflow's builder turns <button>s into links, so every control is <a href="#" role="button">.
@@ -27,17 +28,21 @@ function initLinkButtons(root) {
   });
 }
 
-export function initNewHero() {
+/**
+ * `skipIntro`: the visitor arrived from another page on the site, so the Enter screen and the hero's
+ * entrance are skipped; the page transition is their way in. Returns the teardown function.
+ */
+export function initNewHero({ skipIntro = false } = {}) {
   const root = document.querySelector('.wh-root');
-  if (!root) return;
+  if (!root) return null;
   const isDesktop = window.matchMedia('(min-width: 992px)').matches;
 
   document.body.dataset.product = 'burger';
-  if (document.getElementById('home-intro')) document.body.classList.add('wh-no-scroll');
+  if (!skipIntro && document.getElementById('home-intro')) document.body.classList.add('wh-no-scroll');
 
   initLinkButtons(root);
   initClouds();
-  initPopups();
+  const destroyPopups = initPopups();
   initBarks();
 
   setMotionScope(document.getElementById(isDesktop ? 'home-hero' : 'mobile-hero'));
@@ -48,11 +53,24 @@ export function initNewHero() {
   // active world and its neighbours, see motion.js.
   initMotion({ hero, mobileHero });
 
-  initIntro({
+  const destroyIntro = initIntro({
+    skip: skipIntro,
     onEnter() {
       // Reveal the hero with the staggered "rise" the original had.
       hero?.playEntrance();
       mobileHero?.playEntrance();
     },
   });
+
+  // The music is the one thing that carries on between pages: it stops when the visitor leaves,
+  // since only the homepage has a control for it, and picks up again when they come back.
+  if (skipIntro) resumeMusic();
+
+  return () => {
+    pauseMusic();
+    destroyIntro?.();
+    destroyPopups();
+    hero?.destroy();
+    destroyMotion();
+  };
 }

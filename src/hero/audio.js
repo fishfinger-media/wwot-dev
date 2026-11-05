@@ -21,6 +21,15 @@ export function createMusic() {
 }
 export function getMusic() { return music; }
 
+let resumeOnReturn = false;
+export function pauseMusic() {
+  resumeOnReturn = !!music && !music.paused;
+  music?.pause();
+}
+export function resumeMusic() {
+  if (resumeOnReturn) music.play().catch(() => {});
+}
+
 let bark;
 export function playBark() {
   if (!bark) {

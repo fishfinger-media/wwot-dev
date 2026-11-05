@@ -1,13 +1,12 @@
 // New homepage hero. Markup, styles and assets all live in Webflow (every class is `wh-` prefixed);
 // this module only wires up behaviour, and runs only when the hero root (.wh-root) is on the page.
 import { initClouds } from './clouds.js';
-import { initIntro } from './intro.js';
 import { initHero } from './hero.js';
 import { initMobileHero } from './mobile-hero.js';
 import { initPopups } from './popups.js';
 import { initMotion, destroyMotion, setMotionScope } from './motion.js';
 import { initBarks } from './barks.js';
-import { updateMusicControl } from '../music-control.js';
+import { introShowing, onEntered } from '../intro.js';
 
 /**
  * Webflow's builder turns <button>s into links, so every control is <a href="#" role="button">.
@@ -38,7 +37,6 @@ export function initNewHero({ skipIntro = false } = {}) {
   const isDesktop = window.matchMedia('(min-width: 992px)').matches;
 
   document.body.dataset.product = 'burger';
-  if (!skipIntro && document.getElementById('home-intro')) document.body.classList.add('wh-no-scroll');
 
   initLinkButtons(root);
   initClouds();
@@ -53,19 +51,16 @@ export function initNewHero({ skipIntro = false } = {}) {
   // active world and its neighbours, see motion.js.
   initMotion({ hero, mobileHero });
 
-  const destroyIntro = initIntro({
-    skip: skipIntro,
-    onEnter() {
-      // Reveal the hero with the staggered "rise" the original had.
-      hero?.playEntrance();
-      mobileHero?.playEntrance();
-      updateMusicControl({ entered: true });
-    },
-  });
+  // Reveal the hero with the staggered "rise" the original had: as the Enter screen slides away, or
+  // straight away on a page load without one. Arriving through a page transition, it's already in.
+  const playEntrance = () => { hero?.playEntrance(); mobileHero?.playEntrance(); };
+  let stopWaiting;
+  if (introShowing()) stopWaiting = onEntered(playEntrance);
+  else if (!skipIntro) playEntrance();
 
   // The music keeps playing when the visitor leaves; the music control (src/music-control.js) is on every page.
   return () => {
-    destroyIntro?.();
+    stopWaiting?.();
     destroyPopups();
     hero?.destroy();
     destroyMotion();

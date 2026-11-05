@@ -6,7 +6,8 @@
  * When a visit starts on another page there isn't one, so it's built here with the same class and
  * picks up the same Webflow styles: fixed bottom right, parked 20vh below the screen until shown.
  */
-import { createMusic, getMusic, hasMusic, onMusicCreated, rememberMusicSources } from './hero/audio.js';
+import { getMusic, hasMusic, onMusicCreated, rememberMusicSources, setMusicOn } from './hero/audio.js';
+import { introShowing, onEntered } from './intro.js';
 
 const ICON_VOL_ON = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f66fa8b47bafdf14a7_icon_vol-on.svg';
 const ICON_VOL_OFF = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f68e8cce0ba76b5e15_icon_vol-off.svg';
@@ -37,15 +38,13 @@ function showState() {
 
 let shown = false;
 /**
- * Slides the button up, once the visit has music to control and nothing covers the page (on a
- * homepage load, the Enter screen). Called after every page set-up, and by the hero with
- * `entered` as the Enter screen starts to slide away.
+ * Slides the button up, once the visit has music to control and the Enter screen isn't covering
+ * the page. Called after every page set-up and as the Enter screen slides away.
  */
-export function updateMusicControl({ entered = false } = {}) {
+export function updateMusicControl() {
   if (!button || shown) return;
   rememberMusicSources();
-  const introShowing = !entered && document.querySelector('#home-intro:not(.wh-is-done)');
-  if (!hasMusic() || introShowing) return;
+  if (!hasMusic() || introShowing()) return;
   shown = true;
   // A CSS transition rather than a tween: tweens made during page set-up are reverted with the page.
   button.style.transition = 'transform 1s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -63,11 +62,7 @@ export function initMusicControl() {
   };
   if (getMusic()) watch(getMusic());
   onMusicCreated(watch);
+  onEntered(updateMusicControl);
 
-  button.addEventListener('click', () => {
-    const track = createMusic();
-    if (!track) return;
-    if (track.paused) track.play().catch(() => {});
-    else track.pause();
-  });
+  button.addEventListener('click', () => setMusicOn(!getMusic() || getMusic().paused));
 }

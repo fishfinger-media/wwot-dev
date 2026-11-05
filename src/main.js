@@ -6,6 +6,7 @@ import { initNewHero } from './hero/main.js';
 import { initSite } from './site.js';
 import { initTransitions } from './transitions.js';
 import { initMusicControl, updateMusicControl } from './music-control.js';
+import { initIntro, settleIntro } from './intro.js';
 
 gsap.registerPlugin(ScrollTrigger,Draggable,);
 
@@ -21,6 +22,7 @@ requestAnimationFrame(raf)
 
 /** Set up whatever is on the page right now. Returns the function that tears it down again. */
 function initPage(options) {
+    settleIntro();
     let destroyHero, destroySite;
     const ctx = gsap.context(() => {
         // Homepage hero (src/hero); does nothing on pages without it.
@@ -35,5 +37,7 @@ function initPage(options) {
     };
 }
 
+// Once per page load, before the page set-up: the Enter screen decides whether the hero waits for it.
+initIntro();
 initMusicControl();
 initTransitions({ lenis, initPage });

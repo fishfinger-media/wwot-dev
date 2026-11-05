@@ -5,6 +5,7 @@ import Lenis from 'lenis';
 import { initNewHero } from './hero/main.js';
 import { initSite } from './site.js';
 import { initTransitions } from './transitions.js';
+import { initMusicControl, updateMusicControl } from './music-control.js';
 
 gsap.registerPlugin(ScrollTrigger,Draggable,);
 
@@ -26,6 +27,7 @@ function initPage(options) {
         destroyHero = initNewHero(options);
         destroySite = initSite();
     });
+    updateMusicControl();
     return () => {
         destroySite();
         destroyHero?.();
@@ -33,4 +35,5 @@ function initPage(options) {
     };
 }
 
+initMusicControl();
 initTransitions({ lenis, initPage });

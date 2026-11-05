@@ -6,10 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
 import SplitType from 'split-type';
 import Swiper from 'swiper/bundle';
-import { createMusic, getMusic } from './hero/audio.js';
-
-const ICON_VOL_ON = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f66fa8b47bafdf14a7_icon_vol-on.svg';
-const ICON_VOL_OFF = 'https://uploads-ssl.webflow.com/662b7f60d03c5e2b1e67488f/6633b1f68e8cce0ba76b5e15_icon_vol-off.svg';
 
 export function initSite() {
     // SPLIT TEXT
@@ -750,32 +746,6 @@ export function initSite() {
     }
 
 
-    // MUSIC CONTROL
-    // Drives the homepage hero's track (src/hero/audio.js); it is created on first use, so this
-    // works whether or not the visitor clicked Enter. Pages without the hero have no track.
-    if (document.querySelector('.music_control')) {
-
-        const musicControl = document.querySelector('.music_control');
-        const audioIcon = document.getElementById('audio-icon');
-
-        // The track outlives the page, so coming back to the homepage has to show its real state.
-        const existingTrack = getMusic();
-        if (existingTrack) audioIcon.src = existingTrack.paused ? ICON_VOL_ON : ICON_VOL_OFF;
-
-        musicControl.addEventListener('click', function () {
-            const track = createMusic();
-            if (!track) return;
-            if (track.paused) {
-                track.play().catch(() => {});
-                audioIcon.src = ICON_VOL_OFF;
-            } else {
-                track.pause();
-                audioIcon.src = ICON_VOL_ON;
-            }
-        });
-    }
-
-
     // NAVIGATION
     if (window.innerWidth >= 992) {
         let navSize = gsap.timeline({
@@ -792,22 +762,6 @@ export function initSite() {
 
     } else {
         gsap.from('.nav_bg',{ opacity:0})
-    }
-
-    // MUSIC CONTROL VIEW
-    if (document.querySelector('.music_control')) {
-        // by deafult music control is down 20vh when the user has scrolled 100vh the music control shoudl go up 
-
-        gsap.to('.music_control',{
-            y: '0vh',
-            duration: 1,
-            ease: "back.out(1)",
-            scrollTrigger: {
-                trigger: '.music_control',
-                start: "top 80%",
-            
-            }
-        })
     }
 
     // FAQ

@@ -4,12 +4,25 @@
  */
 const urls = () => document.querySelector('.wh-root')?.dataset || {};
 
+// The track's URLs only live on the homepage, but the music carries on across the whole visit, so
+// they're kept from the first time the homepage is seen.
+let sources = null;
+export function rememberMusicSources() {
+  const { musicOgg, musicMp3 } = urls();
+  if (!sources && (musicOgg || musicMp3)) sources = { musicOgg, musicMp3 };
+  return !!sources;
+}
+export const hasMusic = () => !!sources;
+
 let music;
-/** The looping intro track, or null when the page has no hero to read it from. */
+const createdListeners = new Set();
+export const onMusicCreated = (fn) => createdListeners.add(fn);
+
+/** The looping intro track, or null when the visitor hasn't been on the homepage yet. */
 export function createMusic() {
   if (music) return music;
-  const { musicOgg, musicMp3 } = urls();
-  if (!musicOgg && !musicMp3) return null;
+  if (!rememberMusicSources()) return null;
+  const { musicOgg, musicMp3 } = sources;
   music = new Audio();
   // Opus/OGG is ~1/3 the size of the original mp3 for the same loudness; mp3 as fallback.
   const canOgg = musicOgg && music.canPlayType('audio/ogg; codecs=opus');
@@ -17,18 +30,10 @@ export function createMusic() {
   music.loop = true;
   music.volume = 0.6;
   music.preload = 'none';
+  createdListeners.forEach((fn) => fn(music));
   return music;
 }
 export function getMusic() { return music; }
-
-let resumeOnReturn = false;
-export function pauseMusic() {
-  resumeOnReturn = !!music && !music.paused;
-  music?.pause();
-}
-export function resumeMusic() {
-  if (resumeOnReturn) music.play().catch(() => {});
-}
 
 let bark;
 export function playBark() {

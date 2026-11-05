@@ -7,7 +7,7 @@ import { initMobileHero } from './mobile-hero.js';
 import { initPopups } from './popups.js';
 import { initMotion, destroyMotion, setMotionScope } from './motion.js';
 import { initBarks } from './barks.js';
-import { pauseMusic, resumeMusic } from './audio.js';
+import { updateMusicControl } from '../music-control.js';
 
 /**
  * Webflow's builder turns <button>s into links, so every control is <a href="#" role="button">.
@@ -59,15 +59,12 @@ export function initNewHero({ skipIntro = false } = {}) {
       // Reveal the hero with the staggered "rise" the original had.
       hero?.playEntrance();
       mobileHero?.playEntrance();
+      updateMusicControl({ entered: true });
     },
   });
 
-  // The music is the one thing that carries on between pages: it stops when the visitor leaves,
-  // since only the homepage has a control for it, and picks up again when they come back.
-  if (skipIntro) resumeMusic();
-
+  // The music keeps playing when the visitor leaves; the music control (src/music-control.js) is on every page.
   return () => {
-    pauseMusic();
     destroyIntro?.();
     destroyPopups();
     hero?.destroy();
